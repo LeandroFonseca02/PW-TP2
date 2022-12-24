@@ -93,7 +93,7 @@ class Profile(db.Model):
     registration_date = db.Column(db.DateTime, default=datetime.now)
     photo = db.Column(db.String(60), unique=True)
     phone_number = db.Column(db.String(30), unique=True)
-    classification = db.Column(db.Integer(), db.CheckConstraint('classification >= 1 AND classification <= 5'))
+    classification = db.Column(db.Float(), db.CheckConstraint('classification >= 1 AND classification <= 5'))
 
     def __str__(self):
         return self.first_name

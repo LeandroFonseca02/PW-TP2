@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Boleia ismat</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+</head>
+<body>
+<header class="p-3 mb-4 border-bottom header-nav header-ismat sticky-top">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start navbar navbar-expand-lg">
+            <a href="./index.html" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none pe-4">
+                <img src="../static/images/logo-black.svg" alt="logo" style="height: 32px; width: auto;">
+            </a>
+
+            <button class="navbar-toggler ms-auto"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navBarNav"
+                    aria-controls="navBarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navBarNav">
+                <ul class="nav navbar-nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 navbar-ismat">
+                    <li class="nav-item">
+                        <a class="nav-link-ismat" href="./minhasBoleias.html">Minhas Boleias</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-ismat" href="./minhasReservas.html">Minhas Reservas</a>
+                    </li>
+                </ul>
+
+                <div class="dropdown">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="../static/images/icons/user-icon.svg" alt="mdo" class="rounded-circle" width="32" height="32" id="headerProfile">
+                    </a>
+                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" href="./perfil.html">Ver Perfil</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="./login.html">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<div class="container" id="perfilContainer">
+    <div class="col d-flex flex-column mt-3">
+        <div class="row">
+            <div class="col-3">
+                <div class="col d-flex flex-column  align-items-center bg-light perfil-caixa justify-content-center h-100">
+                    <div class="d-flex mt-2">
+                        <h5 id="profileName"></h5>
+                    </div>
+                    <div class="col d-flex flex-column justify-content-center align-items-center justify-content-center">
+                        <div>
+                            <img src="" alt="mdo" class="rounded-circle profile-image" id="profileImage">
+                        </div>
+                        <div>
+                            <form action="./uploadImage" method="POST" id="photoForm" enctype = "multipart/form-data">
+                                <label class="label-input-file" for="uploadProfilePic">Alterar Foto de Perfil</label>
+                                <input name="file" id = "uploadProfilePic" type = "file" accept="image/*" onchange="sendUploadImage()"/>
+                            </form>
+
+                        </div>
+                        <div class="mt-2" id="profileRating"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-9 d-flex flex-column bg-light perfil-caixa">
+                <div class="mt-2 mb-1">
+                    <h3>Dados Pessoais</h3>
+                </div>
+                <div class="col d-flex flex-column justify-content-center">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label for="floatingEmail">Endereço de email</label>
+                            <input type="email" class="form-control input-shadow form-ismat" id="floatingEmail" placeholder="Email">
+                        </div>
+                        <div class="col-6">
+                            <label for="floatingPhoneNumber">Telemóvel</label>
+                            <input type="text" class="form-control input-shadow form-ismat" id="floatingPhoneNumber" placeholder="Telemóvel">
+                        </div>
+                        <div class="col-6">
+                            <label for="floatingFirstName">Nome</label>
+                            <input type="text" class="form-control input-shadow form-ismat" id="floatingFirstName" placeholder="Nome">
+                        </div>
+                        <div class="col-6">
+                            <label for="floatinglastName">Apelido</label>
+                            <input type="text" class="form-control input-shadow form-ismat" id="floatinglastName" placeholder="Apelido">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 mt-4 mb-3">
+                    <button type="button" class="btn-ismat-large">Guardar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="modal fade" id="criarVeiculo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="criarVeiculoLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="criarVeiculoLabel">Criar Veículo</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-toggle="modal" data-bs-target="#editarVeiculos"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="inputMarca" class="form-label">Marca</label>
+                                    <input type="text" class="form-control input-shadow form-ismat" placeholder="Marca" id="inputMarca">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="inputModelo" class="form-label">Modelo</label>
+                                    <input type="text" class="form-control input-shadow form-ismat" placeholder="Modelo" id="inputModelo">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="inputCor" class="form-label">Cor</label>
+                                    <input type="text" class="form-control input-shadow form-ismat" placeholder="Origem" id="inputCor">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="inputMatricula" class="form-label">Matrícula</label>
+                                    <input type="text" class="form-control input-shadow form-ismat" placeholder="Destino" id="inputMatricula">
+                                </div>
+                                <div class="col-12 d-grid">
+                                    <button type="button" class="btn-ismat-large" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#editarVeiculos">Criar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal fade" id="editarVeiculos" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editarVeiculosLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarVeiculosLabel">Perfil</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col">
+                                <div class="h-100" id="carManagerWrapper">
+                                </div>
+                            </div>
+                            <div class="d-flex col mt-4">
+                                <div class="col">
+                                    <button type="button" class="btn-ismat-large" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#criarVeiculo">Criar veículo</button>
+                                </div>
+                                <div class="d-flex col flex-column">
+                                    <button type="button" class="btn-ismat-large align-self-end">Guardar Alterações</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-3 mt-3">
+                <div class="col d-flex flex-column gap-3 align-items-center bg-light perfil-caixa justify-content-center h-100">
+                    <img src="../static/images/car-placeholder.png" alt="Car" style="height: 100px">
+                    <h5>Edite os seus veículos:</h5>
+                    <button type="button" class="btn-ismat-large" data-bs-toggle="modal" data-bs-target="#editarVeiculos">Gerir Veículos</button>
+                </div>
+            </div>
+
+            <div class="col-9 d-flex flex-column bg-light mt-3 perfil-caixa" style="height: 269px">
+                <div class="mt-2 mb-1">
+                    <h3>Alterar Password</h3>
+                </div>
+                <div class="col d-flex flex-column justify-content-center">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label for="floatingActualPassword">Password Atual</label>
+                            <input type="password" class="form-control input-shadow form-ismat" id="floatingActualPassword" placeholder="Password Atual">
+                        </div>
+                        <div class="col-6">
+                            <label for="floatingPassword">Nova Password</label>
+                            <input type="password" class="form-control input-shadow form-ismat" id="floatingPassword" placeholder="Nova Password">
+                        </div>
+                        <div class="col-6">
+                            <label for="floatingConfirmPassword">Confirmar Nova Password</label>
+                            <input type="password" class="form-control input-shadow form-ismat" id="floatingConfirmPassword" placeholder="Confirmar Nova Password">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 mt-4 mb-3">
+                    <button type="button" class="btn-ismat-large">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <div class="col-md-4 d-flex align-items-center">
+            <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+                <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+            </a>
+            <span class="text-muted">© 2022 Boleias ismat</span>
+        </div>
+
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+            <li class="ms-3"><a class="text-muted" target="_blank" href="https://www.facebook.com/institutosuperiormat"><i class="fab fa-facebook" style="font-size: 24px"></i></a></li>
+            <li class="ms-3"><a class="text-muted" target="_blank" href="https://www.linkedin.com/company/ismat"><i class="fab fa-linkedin" style="font-size: 24px"></i></a></li>
+            <li class="ms-3"><a class="text-muted" target="_blank" href="https://www.ismat.pt/"><i class="fa fa-globe" style="font-size: 24px"></i></a></li>
+        </ul>
+    </footer>
+</div>
+
+<script src="./js/script.js"></script>
+<script>
+    function sendUploadImage() {
+        document.getElementById("photoForm").submit();
+    }
+
+    fetch("profileData").then(function (response) {
+        response.json().then(data => {
+            for (let i = 0; i < data.length; i++) {
+                console.log(data[i])
+            }
+        })
+    })
+
+    let data = [
+        {
+            user_id: "1",
+            email: "a@a.com",
+            firstName: "Maria",
+            lastName: "João",
+            photo: "./images/profilePictures/b.jpeg",
+            phoneNumber: "123456789",
+            rating: "4.7"
+        }
+    ]
+
+    let vehicles = [
+        {
+            marca: "Peugeot",
+            modelo: "106",
+            cor: "Branco",
+            matricula: "AL-52-98"
+        },
+        {
+            marca: "Audi",
+            modelo: "R8",
+            cor: "Vermelho",
+            matricula: "83-OK-39"
+        },
+        {
+            marca: "Renault",
+            modelo: "Clio",
+            cor: "Preto",
+            matricula: "03-72-KR"
+        }
+    ];
+
+    createProfile(data[0]);
+    createCarsManager(vehicles,document.getElementById("carManagerWrapper"));
+</script>
+
+
+</body>
