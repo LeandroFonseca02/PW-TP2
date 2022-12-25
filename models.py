@@ -30,7 +30,7 @@ class User(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), unique=True)
-    password = db.Column(db.Unicode(80))
+    password = db.Column(db.Unicode(255))
     active = db.Column(db.Boolean())
     roles = db.relationship(
         "Role", secondary=roles_users_table, backref="user", lazy=True
@@ -91,7 +91,7 @@ class Profile(db.Model):
     first_name = db.Column(db.String(30))
     last_name = db.Column(db.String(30))
     registration_date = db.Column(db.DateTime, default=datetime.now)
-    photo = db.Column(db.String(60), unique=True)
+    photo = db.Column(db.String(60))
     phone_number = db.Column(db.String(30), unique=True)
     classification = db.Column(db.Float(), db.CheckConstraint('classification >= 1 AND classification <= 5'))
 
