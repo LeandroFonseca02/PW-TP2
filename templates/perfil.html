@@ -156,6 +156,22 @@
                         <div class="modal-body">
                             <div class="col">
                                 <div class="h-100" id="carManagerWrapper">
+                                    {% for car in vehicles%}
+                                    <div class="d-flex align-items-start perfil-caixa bg-light mb-2">
+                                        <img class="ms-4 d-none d-md-block me-4 align-self-center" src="../static/images/car-placeholder.png" alt="Car" style="height: 100px">
+                                        <div>
+                                            <div>
+                                                <div class="">Matrícula: {{car.license_plate}}</div>
+                                                <div class="">Marca: {{car.brand}}</div>
+                                                <div class="">Modelo: {{car.model}}</div>
+                                                <div class="">Cor: {{car.color}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex col flex-column">
+                                            <button type="button" class="btn-close align-self-end me-2 mt-1" aria-label="Delete"></button>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="d-flex col mt-4">
@@ -179,10 +195,10 @@
                 </div>
             </div>
             <div class="col-9 d-flex flex-column bg-light mt-3 perfil-caixa" style="height: 269px">
+                <div class="mt-2 mb-1">
+                    <h3>Alterar Password</h3>
+                </div>
                 <form action="/updatePassword" method="POST">
-                    <div class="mt-2 mb-1">
-                        <h3>Alterar Password</h3>
-                    </div>
                     <div class="col d-flex flex-column justify-content-center">
                         <div class="row g-3">
                             <div class="col-6">
@@ -207,7 +223,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="container">
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
@@ -267,7 +282,6 @@
     ];
     let classification = "{{ profile.classification }}"
     starRatingGenerator(document.getElementById("profileRating"), classification)
-    createCarsManager(vehicles,document.getElementById("carManagerWrapper"));
 </script>
 
 

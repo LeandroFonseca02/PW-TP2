@@ -89,7 +89,8 @@ def logout():
 @login_required
 def profile():  # put application's code here
     profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
-    return render_template('perfil.html', email=current_user.email, profile=profile)
+    vehicles = db.session.query(Vehicle).filter(Vehicle.user_id == current_user.id)
+    return render_template('perfil.html', email=current_user.email, profile=profile, vehicles=vehicles)
 
 
 @app.route('/uploadImage', methods=['POST'])
