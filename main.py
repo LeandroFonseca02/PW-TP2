@@ -30,7 +30,9 @@ with app.app_context():
 @app.route('/', methods=['POST', 'GET'])
 @login_required
 def index():  # put application's code here
-    return jsonify(id=current_user.id, email=current_user.email, password=current_user.password)
+    profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
+    vehicles = db.session.query(Vehicle).filter(Vehicle.user_id == current_user.id)
+    return render_template('index.html', profile=profile, vehicles=vehicles)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -157,6 +159,24 @@ def createVehicle():  # put application's code here
         db.session.add(new_vehicle)
         db.session.commit()
         return "sucesso"
+
+
+@app.route('/createRide', methods=['POST'])
+@login_required
+def create_ride():
+    if request.method == 'POST':
+        car = request.form.get('car')
+        origin = request.form.get('origin')
+        destination = request.form.get('destination')
+        date = request.form.get('date')
+        hour = request.form.get('hour')
+        available_seats = request.form.get('availableSeats')
+        new_ride = Ride(vehicle_id=1, user_id=current_user.id, ride_date=date, ride_hour=hour,
+                        number_of_available_seats=available_seats, origin=origin, destination=destination)
+        db.session.add(new_ride)
+        db.session.commit()
+        return redirect('/')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

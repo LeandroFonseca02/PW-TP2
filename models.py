@@ -150,6 +150,7 @@ class Ride(db.Model):
     user_id: int
     vehicle_id: int
     ride_date: str
+    ride_hour: str
     number_of_available_seats: int
     status: str
     origin: str
@@ -164,7 +165,8 @@ class Ride(db.Model):
     user = db.relationship('User', backref='ride')
     vehicle_id = db.Column('vehicle_id', db.ForeignKey('vehicle.id'))
     vehicle = db.relationship('Vehicle', backref='ride')
-    ride_date = db.Column(db.DateTime)
+    ride_date = db.Column(db.Date)
+    ride_hour = db.Column(db.Time)
     number_of_available_seats = db.Column(db.Integer())
     status = db.Column(db.String(50), default='Aberta')
     origin = db.Column(db.String(50))
