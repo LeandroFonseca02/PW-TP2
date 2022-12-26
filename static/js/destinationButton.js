@@ -5,13 +5,13 @@ function changeInputs(button){
     if(button.classList.contains("inputDestino")){
         origem.value = "";
         destino.value = "ISMAT";
-        destino.disabled = true;
-        origem.disabled = false;
+        destino.readOnly = true;
+        origem.readOnly = false;
     }else{
         destino.value= "";
         origem.value = "ISMAT";
-        origem.disabled = true;
-        destino.disabled = false;
+        origem.readOnly = true;
+        destino.readOnly = false;
     }
     $(button).toggleClass('active')
         .siblings().not(this).removeClass('active');
