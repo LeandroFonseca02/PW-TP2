@@ -61,14 +61,14 @@
             <div class="col-3">
                 <div class="col d-flex flex-column  align-items-center bg-light perfil-caixa justify-content-center h-100">
                     <div class="d-flex mt-2">
-                        <h5 id="profileName"></h5>
+                        <h5 id="profileName">{{profile.first_name}} {{profile.last_name}}</h5>
                     </div>
                     <div class="col d-flex flex-column justify-content-center align-items-center justify-content-center">
                         <div>
-                            <img src="" alt="mdo" class="rounded-circle profile-image" id="profileImage">
+                            <img src="{{profile.photo}}" alt="mdo" class="rounded-circle profile-image" id="profileImage">
                         </div>
                         <div>
-                            <form action="./uploadImage" method="POST" id="photoForm" enctype = "multipart/form-data">
+                            <form action="/uploadImage" method="POST" id="photoForm" enctype = "multipart/form-data">
                                 <label class="label-input-file" for="uploadProfilePic">Alterar Foto de Perfil</label>
                                 <input name="file" id = "uploadProfilePic" type = "file" accept="image/*" onchange="sendUploadImage()"/>
                             </form>
@@ -87,19 +87,19 @@
                     <div class="row g-3">
                         <div class="col-6">
                             <label for="floatingEmail">Endereço de email</label>
-                            <input type="email" class="form-control input-shadow form-ismat" id="floatingEmail" placeholder="Email">
+                            <input value="{{email}}" type="email" class="form-control input-shadow form-ismat" id="floatingEmail" placeholder="Email">
                         </div>
                         <div class="col-6">
                             <label for="floatingPhoneNumber">Telemóvel</label>
-                            <input type="text" class="form-control input-shadow form-ismat" id="floatingPhoneNumber" placeholder="Telemóvel">
+                            <input value="{{profile.phone_number}}" type="text" class="form-control input-shadow form-ismat" id="floatingPhoneNumber" placeholder="Telemóvel">
                         </div>
                         <div class="col-6">
                             <label for="floatingFirstName">Nome</label>
-                            <input type="text" class="form-control input-shadow form-ismat" id="floatingFirstName" placeholder="Nome">
+                            <input value="{{profile.first_name}}" type="text" class="form-control input-shadow form-ismat" id="floatingFirstName" placeholder="Nome">
                         </div>
                         <div class="col-6">
                             <label for="floatinglastName">Apelido</label>
-                            <input type="text" class="form-control input-shadow form-ismat" id="floatinglastName" placeholder="Apelido">
+                            <input value="{{profile.last_name}}" type="text" class="form-control input-shadow form-ismat" id="floatinglastName" placeholder="Apelido">
                         </div>
                     </div>
                 </div>
@@ -222,20 +222,13 @@
         </ul>
     </footer>
 </div>
+{% set classification = profile.classification %}
 
-<script src="./js/script.js"></script>
+<script src="../static/js/script.js"></script>
 <script>
     function sendUploadImage() {
         document.getElementById("photoForm").submit();
     }
-
-    fetch("profileData").then(function (response) {
-        response.json().then(data => {
-            for (let i = 0; i < data.length; i++) {
-                console.log(data[i])
-            }
-        })
-    })
 
     let data = [
         {
@@ -269,8 +262,8 @@
             matricula: "03-72-KR"
         }
     ];
-
-    createProfile(data[0]);
+    let classification = "{{ profile.classification }}"
+    starRatingGenerator(document.getElementById("profileRating"), classification)
     createCarsManager(vehicles,document.getElementById("carManagerWrapper"));
 </script>
 

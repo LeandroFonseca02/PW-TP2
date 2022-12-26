@@ -90,8 +90,8 @@ def logout():
 @app.route('/profile', methods=['GET'])
 @login_required
 def profile():  # put application's code here
-    print(current_user)
-    return render_template('perfil.html')
+    profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
+    return render_template('perfil.html', email=current_user.email, profile=profile)
 
 
 @app.route('/uploadImage', methods=['POST'])
@@ -100,7 +100,10 @@ def uploadImage():  # put application's code here
         f = request.files['file']
         filename = secure_filename(f.filename)
         f.save(os.path.join(UPLOAD_FOLDER, filename))
-        return "Foto uploaded"
+        profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
+        profile.photo = UPLOAD_FOLDER+filename
+        db.session.commit()
+        return redirect("/profile")
 
 
 if __name__ == '__main__':
