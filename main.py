@@ -67,12 +67,10 @@ def register():  # put application's code here
             if password != confirm_password:
                 return "Passwords diferentes"
             else:
-                new_user = User(email=email, password=generate_password_hash(password, method='sha256'), active=True)
+                new_user = User(email=email, password=generate_password_hash(password, method='sha256'))
                 db.session.add(new_user)
                 db.session.commit()
-                new_profile = Profile(user_id=new_user.id, first_name=firstname, last_name=lastname,
-                                      registration_date=datetime.now(), photo='none', phone_number=phone,
-                                      classification=5.0)
+                new_profile = Profile(user_id=new_user.id, first_name=firstname, last_name=lastname, phone_number=phone)
                 db.session.add(new_profile)
                 db.session.commit()
                 login_user(new_user)
@@ -95,6 +93,7 @@ def profile():  # put application's code here
 
 
 @app.route('/uploadImage', methods=['POST'])
+@login_required
 def uploadImage():  # put application's code here
     if request.method == 'POST':
         f = request.files['file']
@@ -105,6 +104,58 @@ def uploadImage():  # put application's code here
         db.session.commit()
         return redirect("/profile")
 
+
+@app.route('/updateProfileData', methods=['POST'])
+@login_required
+def updateProfileData():  # put application's code here
+    if request.method == 'POST':
+        email = request.form.get('email')
+        firstname = request.form.get('firstname')
+        lastname = request.form.get('lastname')
+        phone = request.form.get('phone')
+        user = db.session.query(User).filter(User.id == current_user.id).first()
+        profile = db.session.query(Profile).filter(Profile.user_id == user.id).first()
+        user.email = email
+        profile.first_name = firstname
+        profile.last_name = lastname
+        profile.phone_number = phone
+        db.session.commit()
+        return redirect("/profile")
+
+
+@app.route('/updatePassword', methods=['POST'])
+@login_required
+def updatePassword():  # put application's code here
+    if request.method == 'POST':
+        password = request.form.get('password')
+        newPassword = request.form.get('newPassword')
+        passwordConfirmation = request.form.get('passwordConfirmation')
+        user = db.session.query(User).filter(User.id == current_user.id).first()
+
+        if check_password_hash(user.password, password):
+            if newPassword == passwordConfirmation:
+                user.password = generate_password_hash(newPassword, method='sha256')
+                db.session.commit()
+                return redirect("/profile")
+            else:
+                return "password desigual"
+        else:
+            return "password incorreta"
+
+
+@app.route('/createVehicle', methods=['POST'])
+@login_required
+def createVehicle():  # put application's code here
+    if request.method == 'POST':
+        brand = request.form.get('brand')
+        model = request.form.get('model')
+        color = request.form.get('color')
+        licensePlate = request.form.get('licensePlate')
+        new_vehicle = Vehicle(user_id=current_user.id, license_plate=licensePlate, color=color,
+                              brand=brand, model=model)
+        db.session.add(new_vehicle)
+        db.session.commit()
+        return "sucesso"
 
 if __name__ == '__main__':
     app.run(debug=True)

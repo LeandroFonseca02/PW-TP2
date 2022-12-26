@@ -31,7 +31,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.Unicode(255))
-    active = db.Column(db.Boolean())
+    active = db.Column(db.Boolean(), default=True)
     roles = db.relationship(
         "Role", secondary=roles_users_table, backref="user", lazy=True
     )
@@ -49,11 +49,11 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return "<User %r>" % self.email
 
-    def __init__(self, email, password, active):
-        self.email = email
-        self.password = password
-        self.active = active
-
+    # def __init__(self, email, password, active):
+    #     self.email = email
+    #     self.password = password
+    #     self.active = active
+    #
 
 @dataclass
 class Role(db.Model, RoleMixin):
@@ -91,21 +91,22 @@ class Profile(db.Model):
     first_name = db.Column(db.String(30))
     last_name = db.Column(db.String(30))
     registration_date = db.Column(db.DateTime, default=datetime.now)
-    photo = db.Column(db.String(60))
+    photo = db.Column(db.String(60), default='../static/images/icons/profile-icon.svg')
     phone_number = db.Column(db.String(30), unique=True)
-    classification = db.Column(db.Float(), db.CheckConstraint('classification >= 1 AND classification <= 5'))
+    classification = db.Column(db.Float(), db.CheckConstraint('classification >= 1 AND classification <= 5'),
+                               default=2.5)
 
     def __str__(self):
         return self.first_name
 
-    def __init__(self, user_id, first_name, last_name, registration_date, photo, phone_number, classification):
-        self.user_id = user_id
-        self.first_name = first_name
-        self.last_name = last_name
-        self.registration_date = registration_date
-        self.photo = photo
-        self.phone_number = phone_number
-        self.classification = classification
+    # def __init__(self, user_id, first_name, last_name, registration_date, photo, phone_number, classification):
+    #     self.user_id = user_id
+    #     self.first_name = first_name
+    #     self.last_name = last_name
+    #     self.registration_date = registration_date
+    #     self.photo = photo
+    #     self.phone_number = phone_number
+    #     self.classification = classification
 
 
 @dataclass
@@ -132,15 +133,15 @@ class Vehicle(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
 
-    def __init__(self, user_id, license_plate, color, is_deleted, brand, model, created_at, updated_at):
-        self.user_id = user_id
-        self.license_plate = license_plate
-        self.color = color
-        self.is_deleted = is_deleted
-        self.brand = brand
-        self.model = model
-        self.created_at = created_at
-        self.updated_at = updated_at
+    # def __init__(self, user_id, license_plate, color, is_deleted, brand, model, created_at, updated_at):
+    #     self.user_id = user_id
+    #     self.license_plate = license_plate
+    #     self.color = color
+    #     self.is_deleted = is_deleted
+    #     self.brand = brand
+    #     self.model = model
+    #     self.created_at = created_at
+    #     self.updated_at = updated_at
 
 
 @dataclass
@@ -165,23 +166,23 @@ class Ride(db.Model):
     vehicle = db.relationship('Vehicle', backref='ride')
     ride_date = db.Column(db.DateTime)
     number_of_available_seats = db.Column(db.Integer())
-    status = db.Column(db.String(50))
+    status = db.Column(db.String(50), default='Aberta')
     origin = db.Column(db.String(50))
     destination = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
 
-    def __init__(self, user_id, vehicle_id, ride_date, number_of_available_seats, status, origin, destination,
-                 created_at, updated_at):
-        self.user_id = user_id
-        self.vehicle_id = vehicle_id
-        self.ride_date = ride_date
-        self.number_of_available_seats = number_of_available_seats
-        self.status = status
-        self.origin = origin
-        self.destination = destination
-        self.created_at = created_at
-        self.updated_at = updated_at
+    # def __init__(self, user_id, vehicle_id, ride_date, number_of_available_seats, status, origin, destination,
+    #              created_at, updated_at):
+    #     self.user_id = user_id
+    #     self.vehicle_id = vehicle_id
+    #     self.ride_date = ride_date
+    #     self.number_of_available_seats = number_of_available_seats
+    #     self.status = status
+    #     self.origin = origin
+    #     self.destination = destination
+    #     self.created_at = created_at
+    #     self.updated_at = updated_at
 
 
 @dataclass
@@ -202,11 +203,11 @@ class Reservation(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
 
-    def __init__(self, user_id, ride_id, created_at, updated_at):
-        self.user_id = user_id
-        self.ride_id = ride_id
-        self.created_at = created_at
-        self.updated_at = updated_at
+    # def __init__(self, user_id, ride_id, created_at, updated_at):
+    #     self.user_id = user_id
+    #     self.ride_id = ride_id
+    #     self.created_at = created_at
+    #     self.updated_at = updated_at
 
 
 if __name__ == "__main__":
