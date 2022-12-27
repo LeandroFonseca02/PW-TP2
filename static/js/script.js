@@ -54,6 +54,9 @@ function changeExpandIcon(element) {
     }).then(html => {
         img.src = (img.src.includes('icon-down.svg')) ? '../static/images/icons/icon-up.svg' : '../static/images/icons/icon-down.svg';
         cardContent.innerHTML = html;
+        $.get('/getRideRating/'+element.name, function (data,status) {
+            console.log("Data: "+ data + "\nStatus: " + status)
+        })
     });
 }
 

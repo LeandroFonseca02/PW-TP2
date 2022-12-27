@@ -40,7 +40,6 @@
                     <td class="ps-3">{{ passenger.first_name }}</td>
                     <td>
                         <div class="ms-3" id="cardContentAvaliacao{{ ride.id }}{{ passenger.id }}">
-
                         </div>
                     </td>
                     <td>
@@ -84,3 +83,18 @@
     </div>
 </div>
 <div class="card-blocker"></div>
+{% set ride_id = ride.id %}
+{% set passengers = passengers %}
+<script>
+    let passengers = "{{passengers}}"
+    let ride_id = "{{ride.id}}"
+    console.log("AAAAAAAAAAAA")
+    for (const passenger in passengers) {
+        let passenger_id = passenger.id
+        let classification = passenger.classification
+        $("#cardContentAvaliacao"+ride_id+passenger_id).ready(function () {
+        starRatingGenerator(document.getElementById("cardContentAvaliacao{"+ride_id+passengers),classification)
+    })
+    }
+
+</script>
