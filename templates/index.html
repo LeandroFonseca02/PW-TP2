@@ -41,7 +41,7 @@
                                 <div class="card-body">
                                     <div class="d-flex flex-row boleia-header align-items-center gap-4">
                                         <img class="ms-4 d-lg-block d-md-none car-card-image"
-                                             src="../static/images/car-placeholder.png" alt="Car">
+                                             src="../static/images/car-placeholder.png" alt="Car" style="height: 64px;">
                                         <div class="col">
                                             <div class="align-self-start card-header-text">{{ ride.origin }} - {{ ride.destination }}</div>
                                         </div>
@@ -51,7 +51,7 @@
                                         <div>
                                             <button class="btn" type="button" data-bs-toggle="collapse"
                                                     data-bs-target="#cardContent{{ ride.id }}" aria-expanded="false"
-                                                    aria-controls="#cardContent{{ ride.id }}"onclick="changeExpandIcon(this)"
+                                                    aria-controls="#cardContent{{ ride.id }}" onclick="changeExpandIcon(this)"
                                                     name="{{ ride.id }}">
                                                 <img src="../static/images/icons/icon-down.svg" style="height: 24px" alt="expandir">
                                             </button>
@@ -59,8 +59,7 @@
                                     </div>
                                 </div>
 
-
-                                <div class="collapse" id="cardContent{{ ride.id }}}">
+                                <div class="collapse" id="cardContent{{ ride.id }}">
 
                                 </div>
                             </div>
@@ -211,7 +210,7 @@
                             </div>
                             <div>
                                 <label for="inputCriarDescricao" class="form-label">Descrição</label>
-                                <textarea class="form-control input-shadow form-ismat" style="height: 180px; resize: none"
+                                <textarea name="description" class="form-control input-shadow form-ismat" style="height: 180px; resize: none"
                                           placeholder="Descrição" id="inputCriarDescricao"></textarea>
                             </div>
                             <div class="col-12 d-grid">

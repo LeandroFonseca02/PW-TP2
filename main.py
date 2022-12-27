@@ -5,7 +5,6 @@ from flask import Flask, render_template, request, redirect, jsonify
 from flask_login import login_required, login_user, logout_user, current_user, LoginManager
 from models import *
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/rides'
@@ -35,7 +34,8 @@ def index():  # put application's code here
                                'extract(MINUTES FROM r.ride_hour) AS ride_minutes,r.number_of_available_seats,r.status,r.origin,r.destination '
                                'FROM ride AS r').all()
     profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
-    return render_template('index.html', profile=profile, title='Boleias ISMAT', rides=rides)
+    vehicles = db.session.query(Vehicle).filter(Vehicle.user_id == current_user.id).all()
+    return render_template('index.html', profile=profile, title='Boleias ISMAT', rides=rides, vehicles=vehicles)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -174,9 +174,10 @@ def create_ride():
         destination = request.form.get('destination')
         date = request.form.get('date')
         hour = request.form.get('hour')
+        description = request.form.get('description')
         available_seats = request.form.get('availableSeats')
         new_ride = Ride(vehicle_id=1, user_id=current_user.id, ride_date=date, ride_hour=hour,
-                        number_of_available_seats=available_seats, origin=origin, destination=destination)
+                        number_of_available_seats=available_seats, origin=origin, destination=destination, description=description)
         db.session.add(new_ride)
         db.session.commit()
         return redirect('/')
@@ -185,14 +186,20 @@ def create_ride():
 @app.route('/getRideData/<ride_id>', methods=['GET'])
 @login_required
 def getRideData(ride_id):
-    ride_query = 'SELECT r.id,r.user_id,extract(MONTH FROM r.ride_date) AS ride_date_month, ' \
-                 'extract(DAY FROM r.ride_date) AS ride_date_day,extract(HOURS FROM r.ride_hour) AS ride_hours,' \
-                 'extract(MINUTES FROM r.ride_hour) AS ride_minutes,r.number_of_available_seats,r.status,r.origin,r.destination ' \
-                 'FROM ride AS r AND r.id = ' + ride_id
-    ride = db.session.execute(ride_query).first()
-    user = db.session.query(User).filter(User.id == ride.user_id).first()
-    print(ride)
-    return render_template('card-content.html', ride=ride)
+    passengers_query = """
+        select u.id as user_id, email, first_name, last_name,
+            photo, phone_number, classification
+            from "user" as u join profile p on u.id = p.user_id
+            join reservation r on u.id = r.user_id join ride r2 on r2.id = r.ride_id
+            where r2.id = """ + ride_id
+    condutor_query = """SELECT  u.id as user_id, email, first_name, last_name,
+        photo, phone_number, classification FROM "user" as u, profile p , ride r
+        WHERE u.id = p.user_id AND r.user_id = u.id AND r.id = """ + ride_id
+    condutor = db.session.execute(condutor_query).first()
+    passengers = db.session.execute(passengers_query).all()
+    ride = db.session.query(Ride).filter(Ride.id == int(ride_id)).first()
+    vehicle = db.session.query(Vehicle).filter(Vehicle.id == ride.vehicle_id).first()
+    return render_template('card-content.html', passengers=passengers, ride=ride, condutor=condutor, vehicle=vehicle)
 
 if __name__ == '__main__':
     app.run(debug=True)

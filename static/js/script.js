@@ -44,15 +44,16 @@ function starRatingGenerator(element,rating){
 
 function changeExpandIcon(element) {
     let img = element.querySelector("img");
-    img.src = (img.src.includes('icon-down.svg')) ? '../static/images/icons/icon-up.svg' : '../static/images/icons/icon-down.svg';
-    $.getJSON({
-        url: '/getRideData/'+element.name,
-        type: 'GET',
-        success: function (response) {
-            cardContent = document.getElementById("cardContent"+element.name);
-            cardContent.innerHTML = response.name
-        },
-        contentType: 'application/json; charset=utf-8'
+    cardContent = document.getElementById("cardContent"+element.name);
+
+
+    fetch('/getRideData/'+element.name, {
+        method: "GET"
+    }).then(response => {
+        return response.text();
+    }).then(html => {
+        img.src = (img.src.includes('icon-down.svg')) ? '../static/images/icons/icon-up.svg' : '../static/images/icons/icon-down.svg';
+        cardContent.innerHTML = html;
     });
 }
 

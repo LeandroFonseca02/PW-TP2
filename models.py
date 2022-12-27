@@ -155,6 +155,7 @@ class Ride(db.Model):
     status: str
     origin: str
     destination: str
+    description: str
     created_at: str
     updated_at: str
 
@@ -171,6 +172,7 @@ class Ride(db.Model):
     status = db.Column(db.String(50), default='Aberta')
     origin = db.Column(db.String(50))
     destination = db.Column(db.String(50))
+    description = db.Column(db.String(250))
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
 
