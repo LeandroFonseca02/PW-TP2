@@ -237,6 +237,14 @@ def getProfileModal(user_id):
 
     return render_template('profile-modal.html',email=user.email,profile=profile)
 
+@app.route('/getUserRating/<user_id>', methods=['GET'])
+@login_required
+def getUserRating(user_id):
+    profile = db.session.query(Profile).filter(Profile.user_id == int(user_id)).first()
+    return jsonify(rating = profile.classification)
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -6,7 +6,11 @@ function getUserModal(user_id){
         return response.text();
     }).then(html => {
         modalWrapper.innerHTML = html;
-        $("#profileCard"+user_id).modal("toggle")
+        $.getJSON('/getUserRating/'+user_id, function (response) {
+            ratingElement = document.querySelector('#profileCardAvaliacao'+user_id);
+            starRatingGenerator(ratingElement,response.rating);
+        })
+        $("#profileCard"+user_id).modal("toggle");
     });
 }
 function createStar(div,score){
