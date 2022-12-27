@@ -46,8 +46,8 @@ class User(db.Model, UserMixin):
     def __str__(self):
         return self.email
 
-    def __repr__(self):
-        return "<User %r>" % self.email
+    # def __repr__(self):
+    #     return "<User %r>" % self.email
 
     # def __init__(self, email, password, active):
     #     self.email = email
@@ -90,8 +90,8 @@ class Profile(db.Model):
     user = db.relationship('User', backref='profile')
     first_name = db.Column(db.String(30))
     last_name = db.Column(db.String(30))
-    registration_date = db.Column(db.DateTime, default=datetime.now)
-    photo = db.Column(db.String(60), default='../static/images/icons/profile-icon.svg')
+    registration_date = db.Column(db.DateTime, default=datetime.utcnow())
+    photo = db.Column(db.Text, default='../static/images/icons/profile-icon.svg')
     phone_number = db.Column(db.String(30), unique=True)
     classification = db.Column(db.Float(), db.CheckConstraint('classification >= 1 AND classification <= 5'),
                                default=2.5)
@@ -130,8 +130,8 @@ class Vehicle(db.Model):
     brand = db.Column(db.String(50))
     model = db.Column(db.String(50))
     is_deleted = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.now)
-    updated_at = db.Column(db.DateTime, default=datetime.now)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow())
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow())
 
     # def __init__(self, user_id, license_plate, color, is_deleted, brand, model, created_at, updated_at):
     #     self.user_id = user_id

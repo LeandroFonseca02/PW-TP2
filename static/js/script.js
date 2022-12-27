@@ -44,7 +44,16 @@ function starRatingGenerator(element,rating){
 
 function changeExpandIcon(element) {
     let img = element.querySelector("img");
-    img.src = (img.src.includes('icon-down.svg')) ? './images/icons/icon-up.svg' : './images/icons/icon-down.svg';
+    img.src = (img.src.includes('icon-down.svg')) ? '../static/images/icons/icon-up.svg' : '../static/images/icons/icon-down.svg';
+    $.getJSON({
+        url: '/getRideData/'+element.name,
+        type: 'GET',
+        success: function (response) {
+            cardContent = document.getElementById("cardContent"+element.name);
+            cardContent.innerHTML = response.name
+        },
+        contentType: 'application/json; charset=utf-8'
+    });
 }
 
 function debugStarRating(){

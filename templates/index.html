@@ -1,59 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Boleias ISMAT</title>
-    <link rel="stylesheet" href="../static/css/main.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-</head>
-<body>
-<header class="p-3 mb-4 border-bottom header-nav header-ismat sticky-top">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start navbar navbar-expand-lg">
-            <a href="./index.html" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none pe-4">
-                <img src="../static/images/logo-black.svg" alt="logo" style="height: 32px; width: auto;">
-            </a>
-
-            <button class="navbar-toggler ms-auto"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navBarNav"
-                    aria-controls="navBarNav"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navBarNav">
-                <ul class="nav navbar-nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 navbar-ismat">
-                    <li class="nav-item">
-                        <a class="nav-link-ismat" href="./minhasBoleias.html">Minhas Boleias</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link-ismat" href="./minhasReservas.html">Minhas Reservas</a>
-                    </li>
-                </ul>
-
-                <div class="dropdown">
-                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{profile.photo}}" alt="mdo" class="rounded-circle" width="32" height="32">
-                    </a>
-                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                        <li><a class="dropdown-item" href="./perfil.html">Ver Perfil</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="./login.html">Sign out</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<div class="container">
+{% extends 'content.html' %}
+{% block title %}Boleias ISMAT{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block body %}
+    {% block header %}
+        {{ super() }}
+    {% endblock %}
+        <div class="container">
     <div class="col d-flex flex-column justify-content-center align-items-center">
 
 
@@ -61,12 +15,14 @@
             <div class="card-blocker"></div>
             <div class="d-flex flex-row-reverse align-self-end me-5">
                 <div>
-                    <button type="button" class="btn-ismat-large" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    <button type="button" class="btn-ismat-large" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop">
                         Pesquisar Boleia
                     </button>
                 </div>
                 <div class="me-2">
-                    <button type="button" class="btn-ismat-large" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
+                    <button type="button" class="btn-ismat-large" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop2">
                         Criar Boleia
                     </button>
                 </div>
@@ -76,9 +32,41 @@
                 <h5>Lista de boleias</h5>
             </div>
 
-            <div class="content-wrapper" >
-                <hr class="hr" />
-                <div id="cardList"></div>
+            <div class="content-wrapper">
+                <hr class="hr"/>
+                <div id="cardList">
+                    {% for ride in rides %}
+                        <div class="content" style="display: block;">
+                            <div class="card boleia-card boleia-card-shadow mt-3">
+                                <div class="card-body">
+                                    <div class="d-flex flex-row boleia-header align-items-center gap-4">
+                                        <img class="ms-4 d-lg-block d-md-none car-card-image"
+                                             src="../static/images/car-placeholder.png" alt="Car">
+                                        <div class="col">
+                                            <div class="align-self-start card-header-text">{{ ride.origin }} - {{ ride.destination }}</div>
+                                        </div>
+                                        <div class="col card-header-text">{{ ride.status }}</div>
+                                        <div class="card-header-text">{{ ride.ride_date_day }}/{{ ride.ride_date_month }}</div>
+                                        <div class="card-header-text">{{ ride.ride_hours }}:{{ ride.ride_minutes }}</div>
+                                        <div>
+                                            <button class="btn" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cardContent{{ ride.id }}" aria-expanded="false"
+                                                    aria-controls="#cardContent{{ ride.id }}"onclick="changeExpandIcon(this)"
+                                                    name="{{ ride.id }}">
+                                                <img src="../static/images/icons/icon-down.svg" style="height: 24px" alt="expandir">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="collapse" id="cardContent{{ ride.id }}}">
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
 
                 <div class="mt-4 d-flex justify-content-center align-items-center">
                     <button type="button" class="show-more" onclick="showMoreContent(this)">Mostrar mais</button>
@@ -86,7 +74,9 @@
             </div>
 
 
-            <div class="hr-bar"><hr class="hr" /></div>
+            <div class="hr-bar">
+                <hr class="hr"/>
+            </div>
             <div class="card-blocker"></div>
         </div>
     </div>
@@ -94,593 +84,596 @@
 </div>
 
 
-<div class="container">
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <div class="col-md-4 d-flex align-items-center">
-            <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
-                <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
-            </a>
-            <span class="text-muted">© 2022 Boleias ismat</span>
-        </div>
-
-        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-            <li class="ms-3"><a class="text-muted" target="_blank" href="https://www.facebook.com/institutosuperiormat"><i class="fab fa-facebook" style="font-size: 24px"></i></a></li>
-            <li class="ms-3"><a class="text-muted" target="_blank" href="https://www.linkedin.com/company/ismat"><i class="fab fa-linkedin" style="font-size: 24px"></i></a></li>
-            <li class="ms-3"><a class="text-muted" target="_blank" href="https://www.ismat.pt/"><i class="fa fa-globe" style="font-size: 24px"></i></a></li>
-        </ul>
-    </footer>
-</div>
-
-<!-- Modal Pesquisar Boleia-->
-<div class="modal fade" id="staticBackdrop"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalPesquisarLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalPesquisarLabel">Pesquisar Boleia</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="col">
-                    <div class="d-inline-flex align-items-center mb-1">
-                        <div class="me-5">
-                            <h5>Queres ir para o ISMAT ?</h5>
-                        </div>
-                        <div class="pb-2">
-                            <div id="selectorPesquisar" class="btn-group" data-toggle="buttons-radio">
-                                <button name="criarDestinoIsmat" class="btn btn-primary ismat inputDestino active" onclick="changeInputs(this)">
-                                    <i class="fas fa-check-circle" style="font-size: 24px"></i>
-                                </button>
-                                <button name="criarOrigemIsmat" class="btn btn-primary ismat inputOrigem" onclick="changeInputs(this)">
-                                    <i class="fas fa-times-circle" style="font-size: 24px"></i>
-                                </button>
+        <!-- Modal Pesquisar Boleia-->
+        <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalPesquisarLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalPesquisarLabel">Pesquisar Boleia</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col">
+                            <div class="d-inline-flex align-items-center mb-1">
+                                <div class="me-5">
+                                    <h5>Queres ir para o ISMAT ?</h5>
+                                </div>
+                                <div class="pb-2">
+                                    <div id="selectorPesquisar" class="btn-group" data-toggle="buttons-radio">
+                                        <button name="criarDestinoIsmat" class="btn btn-primary ismat inputDestino active"
+                                                onclick="changeInputs(this)">
+                                            <i class="fas fa-check-circle" style="font-size: 24px"></i>
+                                        </button>
+                                        <button name="criarOrigemIsmat" class="btn btn-primary ismat inputOrigem"
+                                                onclick="changeInputs(this)">
+                                            <i class="fas fa-times-circle" style="font-size: 24px"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <form class="row g-3">
+                            <div class="col-6">
+                                <label for="inputPesquisarOrigem" class="form-label">Origem</label>
+                                <input type="text" class="form-control input-shadow form-ismat inputOrigem" name="inputOrigem"
+                                       placeholder="Origem" id="inputPesquisarOrigem">
+                            </div>
+                            <div class="col-6">
+                                <label for="inputPesquisarDestino" class="form-label">Destino</label>
+                                <input type="text" class="form-control input-shadow form-ismat inputDestino" name="inputDestino"
+                                       placeholder="Destino" id="inputPesquisarDestino" value="ISMAT">
+                            </div>
+                            <div class="col-6">
+                                <label for="inputPesquisarData" class="form-label">Data</label>
+                                <input type="date" class="form-control input-shadow form-ismat" name="inputData"
+                                       placeholder="00/00/0000" id="inputPesquisarData">
+                            </div>
+                            <div class="col-6">
+                                <label for="inputPesquisarHora" class="form-label">Hora</label>
+                                <input type="time" class="form-control input-shadow form-ismat" name="inputHora"
+                                       placeholder="00:00" id="inputPesquisarHora">
+                            </div>
+                            <div class="col-12 d-grid mt-4">
+                                <button type="button" class="btn-ismat-large">Pesquisar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <form class="row g-3">
-                    <div class="col-6">
-                        <label for="inputPesquisarOrigem" class="form-label">Origem</label>
-                        <input type="text" class="form-control input-shadow form-ismat inputOrigem" name="inputOrigem" placeholder="Origem" id="inputPesquisarOrigem">
-                    </div>
-                    <div class="col-6">
-                        <label for="inputPesquisarDestino" class="form-label">Destino</label>
-                        <input type="text" class="form-control input-shadow form-ismat inputDestino" name="inputDestino" placeholder="Destino"  id="inputPesquisarDestino" value="ISMAT">
-                    </div>
-                    <div class="col-6">
-                        <label for="inputPesquisarData" class="form-label">Data</label>
-                        <input type="date" class="form-control input-shadow form-ismat" name="inputData" placeholder="00/00/0000"  id="inputPesquisarData">
-                    </div>
-                    <div class="col-6">
-                        <label for="inputPesquisarHora" class="form-label">Hora</label>
-                        <input type="time" class="form-control input-shadow form-ismat" name="inputHora" placeholder="00:00"  id="inputPesquisarHora">
-                    </div>
-                    <div class="col-12 d-grid mt-4">
-                        <button type="button" class="btn-ismat-large">Pesquisar</button>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Modal Criar Boleia-->
-<div class="modal fade" id="staticBackdrop2" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Criar Boleia</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="col">
-                    <div class="d-inline-flex align-items-center mb-1">
-                        <div class="me-4">
-                            <h5>Queres ir para o ISMAT ?</h5>
-                        </div>
-                        <div class="pb-2">
-                            <div id="selector" class="btn-group" data-toggle="buttons-radio">
-                                <button name="boleia-location" class="btn btn-primary ismat inputDestino active" id="destino-ismat" onclick="changeInputs(this)">
-                                    <i class="fas fa-check-circle" style="font-size: 24px"></i>
-                                </button>
-                                <button name="boleia-location" class="btn btn-primary ismat inputOrigem" id="origem-ismat" onclick="changeInputs(this)">
-                                    <i class="fas fa-times-circle" style="font-size: 24px"></i>
-                                </button>
+        <!-- Modal Criar Boleia-->
+        <div class="modal fade" id="staticBackdrop2" data-bs-keyboard="false" tabindex="-1"
+             aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Criar Boleia</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col">
+                            <div class="d-inline-flex align-items-center mb-1">
+                                <div class="me-4">
+                                    <h5>Queres ir para o ISMAT ?</h5>
+                                </div>
+                                <div class="pb-2">
+                                    <div id="selector" class="btn-group" data-toggle="buttons-radio">
+                                        <button name="boleia-location" class="btn btn-primary ismat inputDestino active"
+                                                id="destino-ismat" onclick="changeInputs(this)">
+                                            <i class="fas fa-check-circle" style="font-size: 24px"></i>
+                                        </button>
+                                        <button name="boleia-location" class="btn btn-primary ismat inputOrigem"
+                                                id="origem-ismat" onclick="changeInputs(this)">
+                                            <i class="fas fa-times-circle" style="font-size: 24px"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+                        <form class="row g-3" action="/createRide" method="POST">
+                            <div class="col-md-6">
+                                <label for="inputVeiculo" class="form-label">Veículo</label>
+                                <select class="form-select input-shadow form-ismat" name="car" aria-label="Veículo"
+                                        id="inputVeiculo">
+                                    {% for car in vehicles %}
+                                    <option selected>{{car.brand}} {{car.model}} ({{car.license_plate}})</option>
+                                    {% endfor %}
+                                    <option selected hidden>Veículo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="inputCriarLugaresDisponiveis" class="form-label">Lugares Disponíveis</label>
+                                <input type="text" name="availableSeats" class="form-control input-shadow form-ismat"
+                                       placeholder="Lugares Disponíveis" id="inputCriarLugaresDisponiveis">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="inputCriarOrigem" class="form-label">Origem</label>
+                                <input type="text" name="origin" class="form-control input-shadow form-ismat inputOrigem"
+                                       placeholder="Origem" id="inputCriarOrigem">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="inputCriarDestino" class="form-label">Destino</label>
+                                <input type="text" name="destination" class="form-control input-shadow form-ismat inputDestino"
+                                       placeholder="Destino" id="inputCriarDestino" value="ISMAT">
+                            </div>
+                            <div class="col-6">
+                                <label for="inputCriarData" class="form-label">Data</label>
+                                <input type="date" name="date" class="form-control input-shadow form-ismat" id="inputCriarData"
+                                       placeholder="00/00/0000">
+                            </div>
+                            <div class="col-6">
+                                <label for="inputCriarHora" class="form-label">Hora</label>
+                                <input type="time" name="hour" class="form-control input-shadow form-ismat" id="inputCriarHora"
+                                       placeholder="00:00">
+                            </div>
+                            <div>
+                                <label for="inputCriarDescricao" class="form-label">Descrição</label>
+                                <textarea class="form-control input-shadow form-ismat" style="height: 180px; resize: none"
+                                          placeholder="Descrição" id="inputCriarDescricao"></textarea>
+                            </div>
+                            <div class="col-12 d-grid">
+                                <button type="submit" class="btn-ismat-large">Criar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
-                <form class="row g-3" action="/createRide" method="POST">
-                    <div class="col-md-6">
-                        <label for="inputVeiculo" class="form-label">Veículo</label>
-                        <select class="form-select input-shadow form-ismat" name="car" aria-label="Veículo" id="inputVeiculo">
-                            {% for car in vehicles %}
-                                <option selected>{{car.brand}} {{car.model}} ({{car.license_plate}}) </option>
-                            {% endfor %}
-                            <option selected hidden>Veículo</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="inputCriarLugaresDisponiveis" class="form-label">Lugares Disponíveis</label>
-                        <input type="text" name="availableSeats" class="form-control input-shadow form-ismat" placeholder="Lugares Disponíveis" id="inputCriarLugaresDisponiveis">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="inputCriarOrigem" class="form-label">Origem</label>
-                        <input type="text" name="origin" class="form-control input-shadow form-ismat inputOrigem" placeholder="Origem" id="inputCriarOrigem">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="inputCriarDestino" class="form-label">Destino</label>
-                        <input type="text" name="destination" class="form-control input-shadow form-ismat inputDestino" placeholder="Destino" id="inputCriarDestino" value="ISMAT">
-                    </div>
-                    <div class="col-6">
-                        <label for="inputCriarData" class="form-label">Data</label>
-                        <input type="date" name="date" class="form-control input-shadow form-ismat" id="inputCriarData" placeholder="00/00/0000">
-                    </div>
-                    <div class="col-6">
-                        <label for="inputCriarHora"  class="form-label">Hora</label>
-                        <input type="time" name="hour" class="form-control input-shadow form-ismat" id="inputCriarHora" placeholder="00:00">
-                    </div>
-                    <div>
-                        <label for="inputCriarDescricao"  class="form-label">Descrição</label>
-                        <textarea class="form-control input-shadow form-ismat" style="height: 180px; resize: none" placeholder="Descrição" id="inputCriarDescricao"></textarea>
-                    </div>
-                    <div class="col-12 d-grid">
-                        <button type="submit" class="btn-ismat-large">Criar</button>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
-</div>
 
 
-<script src="../static/js/script.js"></script>
-<script src="../static/js/destinationButton.js"></script>
-<script>
-    let data = [
-        {
-            id: 1,
-            origem: "ISMAT",
-            destino: "Lagoa",
-            date: "10/02",
-            hour: "18:00",
-            status: "Aberta",
-            nrLugaresDisponiveis: 4,
-            pricePerPassenger: "2€",
-            description: "Tentem não se atrasar!",
-            vehicle: {
-                marca: "BMW",
-                modelo: "Serie 5",
-                cor: "Cinzento",
-                matricula: "12-MH-98"
-            },
-            passengers: [
+        <script src="../static/js/script.js"></script>
+        <script src="../static/js/destinationButton.js"></script>
+        <script>
+            let data = [
                 {
-                    user_id: "1",
-                    email: "joao@email.com",
-                    firstName: "João",
-                    lastName: "Maria",
-                    photo: "./images/profilePictures/a.jpeg",
-                    phoneNumber: "911111111",
-                    rating: "3.2"
+                    id: 1,
+                    origem: "ISMAT",
+                    destino: "Lagoa",
+                    date: "10/02",
+                    hour: "18:00",
+                    status: "Aberta",
+                    nrLugaresDisponiveis: 4,
+                    pricePerPassenger: "2€",
+                    description: "Tentem não se atrasar!",
+                    vehicle: {
+                        marca: "BMW",
+                        modelo: "Serie 5",
+                        cor: "Cinzento",
+                        matricula: "12-MH-98"
+                    },
+                    passengers: [
+                        {
+                            user_id: "1",
+                            email: "joao@email.com",
+                            firstName: "João",
+                            lastName: "Maria",
+                            photo: "./images/profilePictures/a.jpeg",
+                            phoneNumber: "911111111",
+                            rating: "3.2"
+                        },
+                        {
+                            user_id: "2",
+                            email: "maria@email.com",
+                            firstName: "Maria",
+                            lastName: "João",
+                            photo: "./images/profilePictures/b.jpeg",
+                            phoneNumber: "912222222",
+                            rating: "4.7"
+                        },
+                        {
+                            user_id: "3",
+                            email: "rui@email.com",
+                            firstName: "Rui",
+                            lastName: "André",
+                            photo: "./images/icons/profile-icon.svg",
+                            phoneNumber: "913333333",
+                            rating: "4.0"
+                        }
+                    ]
                 },
                 {
-                    user_id: "2",
-                    email: "maria@email.com",
-                    firstName: "Maria",
-                    lastName: "João",
-                    photo: "./images/profilePictures/b.jpeg",
-                    phoneNumber: "912222222",
-                    rating: "4.7"
+                    id: 2,
+                    origem: "Faro",
+                    destino: "ISMAT",
+                    date: "07/09",
+                    hour: "07:30",
+                    status: "Aberta",
+                    nrLugaresDisponiveis: 3,
+                    pricePerPassenger: "Gratuito",
+                    description: "Só espero 15min e depois começo a viagem!",
+                    vehicle: {
+                        marca: "Peugeot",
+                        modelo: "308",
+                        cor: "Laranja",
+                        matricula: "AB-12-34"
+                    },
+                    passengers: [
+                        {
+                            user_id: "4",
+                            email: "tiago@email.com",
+                            firstName: "Tiago",
+                            lastName: "Costa",
+                            photo: "./images/icons/profile-icon.svg",
+                            phoneNumber: "93111111",
+                            rating: "4.7"
+                        }
+                    ]
                 },
                 {
-                    user_id: "3",
-                    email: "rui@email.com",
-                    firstName: "Rui",
-                    lastName: "André",
-                    photo: "./images/icons/profile-icon.svg",
-                    phoneNumber: "913333333",
-                    rating: "4.0"
-                }
-            ]
-        },
-        {
-            id: 2,
-            origem: "Faro",
-            destino: "ISMAT",
-            date: "07/09",
-            hour: "07:30",
-            status: "Aberta",
-            nrLugaresDisponiveis: 3,
-            pricePerPassenger: "Gratuito",
-            description: "Só espero 15min e depois começo a viagem!",
-            vehicle: {
-                marca: "Peugeot",
-                modelo: "308",
-                cor: "Laranja",
-                matricula: "AB-12-34"
-            },
-            passengers: [
-                {
-                    user_id: "4",
-                    email: "tiago@email.com",
-                    firstName: "Tiago",
-                    lastName: "Costa",
-                    photo: "./images/icons/profile-icon.svg",
-                    phoneNumber: "93111111",
-                    rating: "4.7"
-                }
-            ]
-        },
-        {
-            id: 3,
-            origem: "Monchique",
-            destino: "ISMAT",
-            date: "17/03",
-            hour: "14:10",
-            status: "Aberta",
-            nrLugaresDisponiveis: 3,
-            pricePerPassenger: "3,5€",
-            description: "Eu levo medronho!",
-            vehicle: {
-                marca: "Peugeot",
-                modelo: "308",
-                cor: "Laranja",
-                matricula: "AB-12-34"
-            },
-            passengers: [
-                {
-                    user_id: "5",
-                    email: "antonio@email.com",
-                    firstName: "Antonio",
-                    lastName: "Pedro",
-                    photo: "./images/icons/profile-icon.svg",
-                    phoneNumber: "932222222",
-                    rating: "3.2"
+                    id: 3,
+                    origem: "Monchique",
+                    destino: "ISMAT",
+                    date: "17/03",
+                    hour: "14:10",
+                    status: "Aberta",
+                    nrLugaresDisponiveis: 3,
+                    pricePerPassenger: "3,5€",
+                    description: "Eu levo medronho!",
+                    vehicle: {
+                        marca: "Peugeot",
+                        modelo: "308",
+                        cor: "Laranja",
+                        matricula: "AB-12-34"
+                    },
+                    passengers: [
+                        {
+                            user_id: "5",
+                            email: "antonio@email.com",
+                            firstName: "Antonio",
+                            lastName: "Pedro",
+                            photo: "./images/icons/profile-icon.svg",
+                            phoneNumber: "932222222",
+                            rating: "3.2"
+                        },
+                        {
+                            user_id: "6",
+                            email: "filipe@email.com",
+                            firstName: "Filipe",
+                            lastName: "Fagundes",
+                            photo: "./images/profilePictures/a.jpeg",
+                            phoneNumber: "933333333",
+                            rating: "2.9"
+                        }
+                    ]
                 },
                 {
-                    user_id: "6",
-                    email: "filipe@email.com",
-                    firstName: "Filipe",
-                    lastName: "Fagundes",
-                    photo: "./images/profilePictures/a.jpeg",
-                    phoneNumber: "933333333",
-                    rating: "2.9"
-                }
-            ]
-        },
-        {
-            id: 4,
-            origem: "Monchique",
-            destino: "ISMAT",
-            date: "17/03",
-            hour: "14:10",
-            status: "Aberta",
-            nrLugaresDisponiveis: 2,
-            pricePerPassenger: "Uma boa companhia",
-            description: "Só espero 15min e depois começo a viagem!",
-            vehicle: {
-                marca: "Renault",
-                modelo: "Clio",
-                cor: "Preto",
-                matricula: "03-72-KR"
-            },
-            passengers: [
-                {
-                    user_id: "7",
-                    email: "sofia@email.com",
-                    firstName: "Sofia",
-                    lastName: "Silva",
-                    photo: "./images/icons/profile-icon.svg",
-                    phoneNumber: "96111111",
-                    rating: "4.2"
-                }
-            ]
-        },
-        {
-            id: 1,
-            origem: "ISMAT",
-            destino: "Lagoa",
-            date: "10/02",
-            hour: "18:00",
-            status: "Aberta",
-            nrLugaresDisponiveis: 4,
-            pricePerPassenger: "2€",
-            description: "Tentem não se atrasar!",
-            vehicle: {
-                marca: "BMW",
-                modelo: "Serie 5",
-                cor: "Cinzento",
-                matricula: "12-MH-98"
-            },
-            passengers: [
-                {
-                    user_id: "1",
-                    email: "joao@email.com",
-                    firstName: "João",
-                    lastName: "Maria",
-                    photo: "./images/profilePictures/a.jpeg",
-                    phoneNumber: "911111111",
-                    rating: "3.2"
+                    id: 4,
+                    origem: "Monchique",
+                    destino: "ISMAT",
+                    date: "17/03",
+                    hour: "14:10",
+                    status: "Aberta",
+                    nrLugaresDisponiveis: 2,
+                    pricePerPassenger: "Uma boa companhia",
+                    description: "Só espero 15min e depois começo a viagem!",
+                    vehicle: {
+                        marca: "Renault",
+                        modelo: "Clio",
+                        cor: "Preto",
+                        matricula: "03-72-KR"
+                    },
+                    passengers: [
+                        {
+                            user_id: "7",
+                            email: "sofia@email.com",
+                            firstName: "Sofia",
+                            lastName: "Silva",
+                            photo: "./images/icons/profile-icon.svg",
+                            phoneNumber: "96111111",
+                            rating: "4.2"
+                        }
+                    ]
                 },
                 {
-                    user_id: "2",
-                    email: "maria@email.com",
-                    firstName: "Maria",
-                    lastName: "João",
-                    photo: "./images/profilePictures/b.jpeg",
-                    phoneNumber: "912222222",
-                    rating: "4.7"
+                    id: 1,
+                    origem: "ISMAT",
+                    destino: "Lagoa",
+                    date: "10/02",
+                    hour: "18:00",
+                    status: "Aberta",
+                    nrLugaresDisponiveis: 4,
+                    pricePerPassenger: "2€",
+                    description: "Tentem não se atrasar!",
+                    vehicle: {
+                        marca: "BMW",
+                        modelo: "Serie 5",
+                        cor: "Cinzento",
+                        matricula: "12-MH-98"
+                    },
+                    passengers: [
+                        {
+                            user_id: "1",
+                            email: "joao@email.com",
+                            firstName: "João",
+                            lastName: "Maria",
+                            photo: "./images/profilePictures/a.jpeg",
+                            phoneNumber: "911111111",
+                            rating: "3.2"
+                        },
+                        {
+                            user_id: "2",
+                            email: "maria@email.com",
+                            firstName: "Maria",
+                            lastName: "João",
+                            photo: "./images/profilePictures/b.jpeg",
+                            phoneNumber: "912222222",
+                            rating: "4.7"
+                        },
+                        {
+                            user_id: "3",
+                            email: "rui@email.com",
+                            firstName: "Rui",
+                            lastName: "André",
+                            photo: "./images/icons/profile-icon.svg",
+                            phoneNumber: "913333333",
+                            rating: "4.0"
+                        }
+                    ]
                 },
                 {
-                    user_id: "3",
-                    email: "rui@email.com",
-                    firstName: "Rui",
-                    lastName: "André",
-                    photo: "./images/icons/profile-icon.svg",
-                    phoneNumber: "913333333",
-                    rating: "4.0"
-                }
-            ]
-        },
-        {
-            id: 2,
-            origem: "Faro",
-            destino: "ISMAT",
-            date: "07/09",
-            hour: "07:30",
-            status: "Aberta",
-            nrLugaresDisponiveis: 3,
-            pricePerPassenger: "Gratuito",
-            description: "Só espero 15min e depois começo a viagem!",
-            vehicle: {
-                marca: "Peugeot",
-                modelo: "308",
-                cor: "Laranja",
-                matricula: "AB-12-34"
-            },
-            passengers: [
-                {
-                    user_id: "4",
-                    email: "tiago@email.com",
-                    firstName: "Tiago",
-                    lastName: "Costa",
-                    photo: "./images/icons/profile-icon.svg",
-                    phoneNumber: "93111111",
-                    rating: "4.7"
-                }
-            ]
-        },
-        {
-            id: 3,
-            origem: "Monchique",
-            destino: "ISMAT",
-            date: "17/03",
-            hour: "14:10",
-            status: "Aberta",
-            nrLugaresDisponiveis: 3,
-            pricePerPassenger: "3,5€",
-            description: "Eu levo medronho!",
-            vehicle: {
-                marca: "Peugeot",
-                modelo: "308",
-                cor: "Laranja",
-                matricula: "AB-12-34"
-            },
-            passengers: [
-                {
-                    user_id: "5",
-                    email: "antonio@email.com",
-                    firstName: "Antonio",
-                    lastName: "Pedro",
-                    photo: "./images/icons/profile-icon.svg",
-                    phoneNumber: "932222222",
-                    rating: "3.2"
+                    id: 2,
+                    origem: "Faro",
+                    destino: "ISMAT",
+                    date: "07/09",
+                    hour: "07:30",
+                    status: "Aberta",
+                    nrLugaresDisponiveis: 3,
+                    pricePerPassenger: "Gratuito",
+                    description: "Só espero 15min e depois começo a viagem!",
+                    vehicle: {
+                        marca: "Peugeot",
+                        modelo: "308",
+                        cor: "Laranja",
+                        matricula: "AB-12-34"
+                    },
+                    passengers: [
+                        {
+                            user_id: "4",
+                            email: "tiago@email.com",
+                            firstName: "Tiago",
+                            lastName: "Costa",
+                            photo: "./images/icons/profile-icon.svg",
+                            phoneNumber: "93111111",
+                            rating: "4.7"
+                        }
+                    ]
                 },
                 {
-                    user_id: "6",
-                    email: "filipe@email.com",
-                    firstName: "Filipe",
-                    lastName: "Fagundes",
-                    photo: "./images/profilePictures/a.jpeg",
-                    phoneNumber: "933333333",
-                    rating: "2.9"
-                }
-            ]
-        },
-        {
-            id: 4,
-            origem: "Monchique",
-            destino: "ISMAT",
-            date: "17/03",
-            hour: "14:10",
-            status: "Aberta",
-            nrLugaresDisponiveis: 2,
-            pricePerPassenger: "Uma boa companhia",
-            description: "Só espero 15min e depois começo a viagem!",
-            vehicle: {
-                marca: "Renault",
-                modelo: "Clio",
-                cor: "Preto",
-                matricula: "03-72-KR"
-            },
-            passengers: [
-                {
-                    user_id: "7",
-                    email: "sofia@email.com",
-                    firstName: "Sofia",
-                    lastName: "Silva",
-                    photo: "./images/icons/profile-icon.svg",
-                    phoneNumber: "96111111",
-                    rating: "4.2"
-                }
-            ]
-        },
-        {
-            id: 1,
-            origem: "ISMAT",
-            destino: "Lagoa",
-            date: "10/02",
-            hour: "18:00",
-            status: "Aberta",
-            nrLugaresDisponiveis: 4,
-            pricePerPassenger: "2€",
-            description: "Tentem não se atrasar!",
-            vehicle: {
-                marca: "BMW",
-                modelo: "Serie 5",
-                cor: "Cinzento",
-                matricula: "12-MH-98"
-            },
-            passengers: [
-                {
-                    user_id: "1",
-                    email: "joao@email.com",
-                    firstName: "João",
-                    lastName: "Maria",
-                    photo: "./images/profilePictures/a.jpeg",
-                    phoneNumber: "911111111",
-                    rating: "3.2"
+                    id: 3,
+                    origem: "Monchique",
+                    destino: "ISMAT",
+                    date: "17/03",
+                    hour: "14:10",
+                    status: "Aberta",
+                    nrLugaresDisponiveis: 3,
+                    pricePerPassenger: "3,5€",
+                    description: "Eu levo medronho!",
+                    vehicle: {
+                        marca: "Peugeot",
+                        modelo: "308",
+                        cor: "Laranja",
+                        matricula: "AB-12-34"
+                    },
+                    passengers: [
+                        {
+                            user_id: "5",
+                            email: "antonio@email.com",
+                            firstName: "Antonio",
+                            lastName: "Pedro",
+                            photo: "./images/icons/profile-icon.svg",
+                            phoneNumber: "932222222",
+                            rating: "3.2"
+                        },
+                        {
+                            user_id: "6",
+                            email: "filipe@email.com",
+                            firstName: "Filipe",
+                            lastName: "Fagundes",
+                            photo: "./images/profilePictures/a.jpeg",
+                            phoneNumber: "933333333",
+                            rating: "2.9"
+                        }
+                    ]
                 },
                 {
-                    user_id: "2",
-                    email: "maria@email.com",
-                    firstName: "Maria",
-                    lastName: "João",
-                    photo: "./images/profilePictures/b.jpeg",
-                    phoneNumber: "912222222",
-                    rating: "4.7"
+                    id: 4,
+                    origem: "Monchique",
+                    destino: "ISMAT",
+                    date: "17/03",
+                    hour: "14:10",
+                    status: "Aberta",
+                    nrLugaresDisponiveis: 2,
+                    pricePerPassenger: "Uma boa companhia",
+                    description: "Só espero 15min e depois começo a viagem!",
+                    vehicle: {
+                        marca: "Renault",
+                        modelo: "Clio",
+                        cor: "Preto",
+                        matricula: "03-72-KR"
+                    },
+                    passengers: [
+                        {
+                            user_id: "7",
+                            email: "sofia@email.com",
+                            firstName: "Sofia",
+                            lastName: "Silva",
+                            photo: "./images/icons/profile-icon.svg",
+                            phoneNumber: "96111111",
+                            rating: "4.2"
+                        }
+                    ]
                 },
                 {
-                    user_id: "3",
-                    email: "rui@email.com",
-                    firstName: "Rui",
-                    lastName: "André",
-                    photo: "./images/icons/profile-icon.svg",
-                    phoneNumber: "913333333",
-                    rating: "4.0"
-                }
-            ]
-        },
-        {
-            id: 2,
-            origem: "Faro",
-            destino: "ISMAT",
-            date: "07/09",
-            hour: "07:30",
-            status: "Aberta",
-            nrLugaresDisponiveis: 3,
-            pricePerPassenger: "Gratuito",
-            description: "Só espero 15min e depois começo a viagem!",
-            vehicle: {
-                marca: "Peugeot",
-                modelo: "308",
-                cor: "Laranja",
-                matricula: "AB-12-34"
-            },
-            passengers: [
-                {
-                    user_id: "4",
-                    email: "tiago@email.com",
-                    firstName: "Tiago",
-                    lastName: "Costa",
-                    photo: "./images/icons/profile-icon.svg",
-                    phoneNumber: "93111111",
-                    rating: "4.7"
-                }
-            ]
-        },
-        {
-            id: 3,
-            origem: "Monchique",
-            destino: "ISMAT",
-            date: "17/03",
-            hour: "14:10",
-            status: "Aberta",
-            nrLugaresDisponiveis: 3,
-            pricePerPassenger: "3,5€",
-            description: "Eu levo medronho!",
-            vehicle: {
-                marca: "Peugeot",
-                modelo: "308",
-                cor: "Laranja",
-                matricula: "AB-12-34"
-            },
-            passengers: [
-                {
-                    user_id: "5",
-                    email: "antonio@email.com",
-                    firstName: "Antonio",
-                    lastName: "Pedro",
-                    photo: "./images/icons/profile-icon.svg",
-                    phoneNumber: "932222222",
-                    rating: "3.2"
+                    id: 1,
+                    origem: "ISMAT",
+                    destino: "Lagoa",
+                    date: "10/02",
+                    hour: "18:00",
+                    status: "Aberta",
+                    nrLugaresDisponiveis: 4,
+                    pricePerPassenger: "2€",
+                    description: "Tentem não se atrasar!",
+                    vehicle: {
+                        marca: "BMW",
+                        modelo: "Serie 5",
+                        cor: "Cinzento",
+                        matricula: "12-MH-98"
+                    },
+                    passengers: [
+                        {
+                            user_id: "1",
+                            email: "joao@email.com",
+                            firstName: "João",
+                            lastName: "Maria",
+                            photo: "./images/profilePictures/a.jpeg",
+                            phoneNumber: "911111111",
+                            rating: "3.2"
+                        },
+                        {
+                            user_id: "2",
+                            email: "maria@email.com",
+                            firstName: "Maria",
+                            lastName: "João",
+                            photo: "./images/profilePictures/b.jpeg",
+                            phoneNumber: "912222222",
+                            rating: "4.7"
+                        },
+                        {
+                            user_id: "3",
+                            email: "rui@email.com",
+                            firstName: "Rui",
+                            lastName: "André",
+                            photo: "./images/icons/profile-icon.svg",
+                            phoneNumber: "913333333",
+                            rating: "4.0"
+                        }
+                    ]
                 },
                 {
-                    user_id: "6",
-                    email: "filipe@email.com",
-                    firstName: "Filipe",
-                    lastName: "Fagundes",
-                    photo: "./images/profilePictures/a.jpeg",
-                    phoneNumber: "933333333",
-                    rating: "2.9"
-                }
-            ]
-        },
-        {
-            id: 4,
-            origem: "Monchique",
-            destino: "ISMAT",
-            date: "17/03",
-            hour: "14:10",
-            status: "Aberta",
-            nrLugaresDisponiveis: 2,
-            pricePerPassenger: "Uma boa companhia",
-            description: "Só espero 15min e depois começo a viagem!",
-            vehicle: {
-                marca: "Renault",
-                modelo: "Clio",
-                cor: "Preto",
-                matricula: "03-72-KR"
-            },
-            passengers: [
+                    id: 2,
+                    origem: "Faro",
+                    destino: "ISMAT",
+                    date: "07/09",
+                    hour: "07:30",
+                    status: "Aberta",
+                    nrLugaresDisponiveis: 3,
+                    pricePerPassenger: "Gratuito",
+                    description: "Só espero 15min e depois começo a viagem!",
+                    vehicle: {
+                        marca: "Peugeot",
+                        modelo: "308",
+                        cor: "Laranja",
+                        matricula: "AB-12-34"
+                    },
+                    passengers: [
+                        {
+                            user_id: "4",
+                            email: "tiago@email.com",
+                            firstName: "Tiago",
+                            lastName: "Costa",
+                            photo: "./images/icons/profile-icon.svg",
+                            phoneNumber: "93111111",
+                            rating: "4.7"
+                        }
+                    ]
+                },
                 {
-                    user_id: "7",
-                    email: "sofia@email.com",
-                    firstName: "Sofia",
-                    lastName: "Silva",
-                    photo: "./images/icons/profile-icon.svg",
-                    phoneNumber: "96111111",
-                    rating: "4.2"
+                    id: 3,
+                    origem: "Monchique",
+                    destino: "ISMAT",
+                    date: "17/03",
+                    hour: "14:10",
+                    status: "Aberta",
+                    nrLugaresDisponiveis: 3,
+                    pricePerPassenger: "3,5€",
+                    description: "Eu levo medronho!",
+                    vehicle: {
+                        marca: "Peugeot",
+                        modelo: "308",
+                        cor: "Laranja",
+                        matricula: "AB-12-34"
+                    },
+                    passengers: [
+                        {
+                            user_id: "5",
+                            email: "antonio@email.com",
+                            firstName: "Antonio",
+                            lastName: "Pedro",
+                            photo: "./images/icons/profile-icon.svg",
+                            phoneNumber: "932222222",
+                            rating: "3.2"
+                        },
+                        {
+                            user_id: "6",
+                            email: "filipe@email.com",
+                            firstName: "Filipe",
+                            lastName: "Fagundes",
+                            photo: "./images/profilePictures/a.jpeg",
+                            phoneNumber: "933333333",
+                            rating: "2.9"
+                        }
+                    ]
+                },
+                {
+                    id: 4,
+                    origem: "Monchique",
+                    destino: "ISMAT",
+                    date: "17/03",
+                    hour: "14:10",
+                    status: "Aberta",
+                    nrLugaresDisponiveis: 2,
+                    pricePerPassenger: "Uma boa companhia",
+                    description: "Só espero 15min e depois começo a viagem!",
+                    vehicle: {
+                        marca: "Renault",
+                        modelo: "Clio",
+                        cor: "Preto",
+                        matricula: "03-72-KR"
+                    },
+                    passengers: [
+                        {
+                            user_id: "7",
+                            email: "sofia@email.com",
+                            firstName: "Sofia",
+                            lastName: "Silva",
+                            photo: "./images/icons/profile-icon.svg",
+                            phoneNumber: "96111111",
+                            rating: "4.2"
+                        }
+                    ]
                 }
-            ]
-        }
-    ];
-    let vehicles = [
-        {
-            marca: "Peugeot",
-            modelo: "106",
-            cor: "Branco",
-            matricula: "AL-52-98"
-        },
-        {
-            marca: "Audi",
-            modelo: "R8",
-            cor: "Vermelho",
-            matricula: "83-OK-39"
-        },
-        {
-            marca: "Renault",
-            modelo: "Clio",
-            cor: "Preto",
-            matricula: "03-72-KR"
-        }
-    ];
+            ];
+            let vehicles = [
+                {
+                    marca: "Peugeot",
+                    modelo: "106",
+                    cor: "Branco",
+                    matricula: "AL-52-98"
+                },
+                {
+                    marca: "Audi",
+                    modelo: "R8",
+                    cor: "Vermelho",
+                    matricula: "83-OK-39"
+                },
+                {
+                    marca: "Renault",
+                    modelo: "Clio",
+                    cor: "Preto",
+                    matricula: "03-72-KR"
+                }
+            ];
 
-    // getVehiclesOnSelector(document.getElementById("inputVeiculo"),vehicles);
-    // createListOfCards(document.getElementById("cardList"),data);
-</script>
-<script src="../static/js/showMoreButton.js"></script>
+            // getVehiclesOnSelector(document.getElementById("inputVeiculo"),vehicles);
+            // createListOfCards(document.getElementById("cardList"),data);
+        </script>
 
-</body>
-</html>
+    {% block footer %}
+        {{ super() }}
+    {% endblock %}
+
+{% endblock %}
+

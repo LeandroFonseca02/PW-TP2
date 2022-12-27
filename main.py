@@ -17,10 +17,10 @@ login_manager = LoginManager()
 login_manager.login_view = '/login'
 login_manager.init_app(app)
 
+
 @login_manager.user_loader
 def load_user(id):
     return db.session.query(User).filter(User.id == id).first()
-
 
 
 with app.app_context():
@@ -30,9 +30,12 @@ with app.app_context():
 @app.route('/', methods=['POST', 'GET'])
 @login_required
 def index():  # put application's code here
+    rides = db.session.execute('SELECT r.id,r.user_id,extract(MONTH FROM r.ride_date) AS ride_date_month, '
+                               'extract(DAY FROM r.ride_date) AS ride_date_day,extract(HOURS FROM r.ride_hour) AS ride_hours, '
+                               'extract(MINUTES FROM r.ride_hour) AS ride_minutes,r.number_of_available_seats,r.status,r.origin,r.destination '
+                               'FROM ride AS r').all()
     profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
-    vehicles = db.session.query(Vehicle).filter(Vehicle.user_id == current_user.id)
-    return render_template('index.html', profile=profile, vehicles=vehicles)
+    return render_template('index.html', profile=profile, title='Boleias ISMAT', rides=rides)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -80,6 +83,7 @@ def register():  # put application's code here
     else:
         return render_template('criar-utilizador.html')
 
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -103,7 +107,7 @@ def uploadImage():  # put application's code here
         filename = secure_filename(f.filename)
         f.save(os.path.join(UPLOAD_FOLDER, filename))
         profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
-        profile.photo = UPLOAD_FOLDER+filename
+        profile.photo = UPLOAD_FOLDER + filename
         db.session.commit()
         return redirect("/profile")
 
@@ -177,6 +181,18 @@ def create_ride():
         db.session.commit()
         return redirect('/')
 
+
+@app.route('/getRideData/<ride_id>', methods=['GET'])
+@login_required
+def getRideData(ride_id):
+    ride_query = 'SELECT r.id,r.user_id,extract(MONTH FROM r.ride_date) AS ride_date_month, ' \
+                 'extract(DAY FROM r.ride_date) AS ride_date_day,extract(HOURS FROM r.ride_hour) AS ride_hours,' \
+                 'extract(MINUTES FROM r.ride_hour) AS ride_minutes,r.number_of_available_seats,r.status,r.origin,r.destination ' \
+                 'FROM ride AS r AND r.id = ' + ride_id
+    ride = db.session.execute(ride_query).first()
+    user = db.session.query(User).filter(User.id == ride.user_id).first()
+    print(ride)
+    return render_template('card-content.html', ride=ride)
 
 if __name__ == '__main__':
     app.run(debug=True)
