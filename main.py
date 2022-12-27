@@ -217,9 +217,8 @@ def getRideRating(ride_id):
         WHERE u.id = p.user_id AND r.user_id = u.id AND r.id = """ + ride_id
     condutor = db.session.execute(condutor_query).first()
     passengers = db.session.execute(passengers_query).all()
-    ride = db.session.query(Ride).filter(Ride.id == int(ride_id)).first()
     dict = {
-        "ride_id": ride.id,
+        "ride_id": ride_id,
         "condutor_id": condutor[0],
         "condutor_classification": condutor[6],
         "passengers":[]
@@ -228,6 +227,15 @@ def getRideRating(ride_id):
         dict['passengers'].append({'passenger_id': passenger[0], 'passenger_classification': passenger[6]})
 
     return jsonify(dict)
+
+
+@app.route('/getProfileModal/<user_id>', methods=['GET'])
+@login_required
+def getProfileModal(user_id):
+    user = db.session.query(User).filter(User.id == int(user_id)).first()
+    profile = db.session.query(Profile).filter(Profile.user_id == int(user_id)).first()
+
+    return render_template('profile-modal.html',email=user.email,profile=profile)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,56 @@
+<div class="modal fade" id="profileCard{{profile.user_id}}"
+data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="profileCardLabel{{profile.user_id}}"
+aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="profileCardTitle{{profile.user_id}}">Perfil</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="col d-flex flex-column">
+                <div class="col mb-3">
+                    <div class="col d-flex flex-column  align-items-center bg-light perfil-caixa justify-content-center h-100">
+                        <div class="col d-flex flex-column justify-content-center align-items-center justify-content-center mt-2">
+                            <div class="mt-2">
+                                <img src="{{profile.photo}}" alt="mdo" class="rounded-circle profile-image">
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <h5>{{profile.first_name}} {{profile.last_name}}</h5>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col mb-3">
+                    <div class="col d-flex flex-column  align-items-center bg-light perfil-caixa justify-content-center h-100">
+                        <h5 class="mt-2">Avaliação:</h5>
+                        <div class="mt-2 mb-2" id="profileCardAvaliacao{{profile.user_id}}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col d-flex flex-column bg-light perfil-caixa">
+                <div class="mt-2 mb-3 ms-2">
+                    <h5>Dados Pessoais</h5>
+                </div>
+                <div class="col d-flex flex-column justify-content-center mb-1">
+                    <div class="row g-3 ms-1">
+                        <div class="col-8">
+                            <label>Endereço de email</label>
+                            <h5>{{email}}</h5>
+                        </div>
+                        <div class="col-4">
+                            <label>Telemóvel</label>
+                            <h5>{{profile.phone_number}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>

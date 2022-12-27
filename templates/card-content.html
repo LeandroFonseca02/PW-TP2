@@ -8,10 +8,10 @@
         <div class="table-responsive text-nowrap">
             <table class="text-nowrap w-auto">
                 <tbody>
-                <tr class="table-row">
+                <tr id="Passenger{{ride.id}}{{condutor.user_id}}" class="table-row">
                     <td>
                         <a href="" data-bs-toggle="modal"
-                           data-bs-target="#profileCard{{ ride.id }}{{ condutor.user_id }}">
+                           data-bs-target="#profileCard{{ condutor.user_id }}">
                             <img class="ms-4 p-2 me-2 rounded-circle card-profile-image"
                                  src="{{ condutor.photo }}"
                                  alt="Profile Image">
@@ -28,10 +28,10 @@
                     </td>
                 </tr>
                 {% for passenger in passengers %}
-                <tr id="Passenger{{ride.id}}" class="table-row">
+                <tr id="Passenger{{ride.id}}{{ passenger.user_id }}" class="table-row">
                     <td>
-                        <a href="" data-bs-toggle="modal"
-                           data-bs-target="#profileCard{{ ride.id }}{{ passenger.id }}">
+                        <a href="#profileCard{{passenger.user_id}}" name="{{ passenger.user_id }}"
+                            onclick="getUserModal(this.name)">
                             <img class="ms-4 p-2 me-2 rounded-circle card-profile-image"
                                  src="{{ passenger.photo }}"
                                  alt="Profile Image">
@@ -39,11 +39,11 @@
                     </td>
                     <td class="ps-3">{{ passenger.first_name }}</td>
                     <td>
-                        <div class="ms-3" id="cardContentAvaliacao{{ ride.id }}{{ passenger.id }}">
+                        <div class="ms-3" id="cardContentAvaliacao{{ ride.id }}{{ passenger.user_id }}">
                         </div>
                     </td>
                     <td>
-                        <div id="cardContentRemove{{ ride.id }}{{ passenger.id }}"></div>
+                        <div id="cardContentRemove{{ ride.id }}{{ passenger.user_id }}"></div>
                     </td>
                 </tr>
 
