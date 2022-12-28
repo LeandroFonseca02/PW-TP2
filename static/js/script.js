@@ -83,9 +83,7 @@ function changeExpandIcon(element) {
         img.src = (img.src.includes('icon-down.svg')) ? '../static/images/icons/icon-up.svg' : '../static/images/icons/icon-down.svg';
         cardContent.innerHTML = html;
         $.getJSON('/getRideRating/'+element.name, function (response) {
-            condutor = cardContent.querySelector('#cardContentAvaliacao'+response.ride_id + response.condutor_id);
             passengers = response.passengers;
-            starRatingGenerator(condutor,response.condutor_classification)
             for (let i = 0; i < passengers.length; i++) {
                 let el = cardContent.querySelector('#cardContentAvaliacao'+response.ride_id + passengers[i].passenger_id)
                 starRatingGenerator(el, passengers[i].passenger_classification)

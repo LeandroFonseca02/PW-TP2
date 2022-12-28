@@ -195,6 +195,7 @@ class Reservation(db.Model):
     user_id: int
     ride_id: int
     status: str
+    is_driver: bool
     created_at: str
     updated_at: str
 
@@ -206,6 +207,7 @@ class Reservation(db.Model):
     ride_id = db.Column('ride_id', db.ForeignKey('ride.id'))
     ride = db.relationship('Ride', backref='reservation')
     status = db.Column(db.String(50), default='Aberta')
+    is_driver = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
 
