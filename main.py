@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, redirect, jsonify
 from flask_login import login_required, login_user, logout_user, current_user, LoginManager
 from models import *
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail, Message
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
@@ -16,6 +17,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhos
 UPLOAD_FOLDER = './static/images/profilePictures/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'cena secreta'
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'boleiasismat@gmail.com'
+app.config['MAIL_PASSWORD'] = 'irawvczpnfosintg'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 login_manager = LoginManager()
 login_manager.login_view = '/login'
@@ -30,6 +39,15 @@ def load_user(id):
 
 with app.app_context():
     db = SQLAlchemy(app)
+
+def sendRecoverPasswordEmail(user):
+    msg = Message(
+    'Recuperação de Password - Boleias ISMAT',
+    sender = 'boleiasismat@gmail.com',
+    recipients = [user.email]
+    )
+    msg.body = 'Boleias ISMAT'
+    mail.send(msg)
 
 
 @app.route('/', methods=['POST', 'GET'])
