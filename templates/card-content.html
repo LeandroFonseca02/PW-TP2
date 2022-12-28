@@ -1,7 +1,3 @@
-<div id="modals{{ ride.id }}">
-
-</div>
-
 <div class="card-blocker"></div>
 <div class="row">
     <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -19,7 +15,7 @@
                     </td>
                     <td class="ps-3">{{ condutor.first_name }}</td>
                     <td>
-                        <div class="ms-3" id="cardContentAvaliacao{{ ride.id }}{{ condutor.user_id }}">
+                        <div class="ms-3" id="cardContentAvaliacao{{ ride.id }}{{ condutor.user_id }}" onload="fn()">
 
                         </div>
                     </td>
@@ -78,23 +74,29 @@
 <div class="d-flex flex-row-reverse">
     <div class="me-4">
         <button type="button" class="btn-ismat-large" data-bs-toggle="modal"
-                data-bs-target="#reservationBoleiaGenerico0">Reservar
+                data-bs-target="#reservation{{ride.id}}">Reservar
         </button>
     </div>
 </div>
 <div class="card-blocker"></div>
-{% set ride_id = ride.id %}
-{% set passengers = passengers %}
-<script>
-    let passengers = "{{passengers}}"
-    let ride_id = "{{ride.id}}"
-    console.log("AAAAAAAAAAAA")
-    for (const passenger in passengers) {
-        let passenger_id = passenger.id
-        let classification = passenger.classification
-        $("#cardContentAvaliacao"+ride_id+passenger_id).ready(function () {
-        starRatingGenerator(document.getElementById("cardContentAvaliacao{"+ride_id+passengers),classification)
-    })
-    }
 
-</script>
+<div class="modal fade" id="reservation{{ride.id}}"
+     data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby=""
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="a">Reservar Boleia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem a certeza que quer reservar a boleia {{ride.origin|upper}}-{{ride.destination|upper}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" name="{{ride.id}}" class="btn btn-success" data-bs-dismiss="modal" onclick="reservation(this.name)">Sim</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Não</button>
+            </div>
+        </div>
+    </div>
+</div>

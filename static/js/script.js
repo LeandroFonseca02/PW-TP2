@@ -13,6 +13,15 @@ function getUserModal(user_id){
         $("#profileCard"+user_id).modal("toggle");
     });
 }
+
+function reservation(ride_id){
+    fetch('/reservation/'+ride_id, {
+        method:"POST",
+        headers:{'Content-Type': 'application/json'},
+        body:JSON.stringify({ride_id:ride_id})
+    })
+}
+
 function createStar(div,score){
     let star;
     if(score >= 0 && score < 0.5){

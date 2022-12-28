@@ -160,7 +160,7 @@ class Ride(db.Model):
     updated_at: str
 
     __tablename__ = 'ride'
-    __table_args__ = (db.UniqueConstraint('user_id', 'vehicle_id', 'ride_date'),)
+    __table_args__ = (db.UniqueConstraint('user_id', 'vehicle_id', 'ride_date', 'ride_hour'),)
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column('user_id', db.ForeignKey('user.id'))
     user = db.relationship('User', backref='ride')
@@ -194,6 +194,7 @@ class Reservation(db.Model):
     id: int
     user_id: int
     ride_id: int
+    status: str
     created_at: str
     updated_at: str
 
@@ -204,6 +205,7 @@ class Reservation(db.Model):
     user = db.relationship('User', backref='reservation')
     ride_id = db.Column('ride_id', db.ForeignKey('ride.id'))
     ride = db.relationship('Ride', backref='reservation')
+    status = db.Column(db.String(50), default='Aberta')
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
 

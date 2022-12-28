@@ -30,10 +30,10 @@ with app.app_context():
 @app.route('/', methods=['POST', 'GET'])
 @login_required
 def index():  # put application's code here
-    rides = db.session.execute('SELECT r.id,r.user_id,extract(MONTH FROM r.ride_date) AS ride_date_month, '
-                               'extract(DAY FROM r.ride_date) AS ride_date_day,extract(HOURS FROM r.ride_hour) AS ride_hours, '
-                               'extract(MINUTES FROM r.ride_hour) AS ride_minutes,r.number_of_available_seats,r.status,r.origin,r.destination '
-                               'FROM ride AS r').all()
+    rides = db.session.execute("""SELECT r.id,r.user_id,to_char(r.ride_date,'MM') AS ride_date_month, 
+                               to_char(r.ride_date,'DD') AS ride_date_day,to_char(r.ride_hour,'HH')AS ride_hours, 
+                               to_char(r.ride_hour,'MI')AS ride_minutes,r.number_of_available_seats,r.status,r.origin,r.destination 
+                               FROM ride AS r WHERE r.status = 'Aberta' AND r.user_id != """+str(current_user.id)).all()
     profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
     vehicles = db.session.query(Vehicle).filter(Vehicle.user_id == current_user.id).all()
     return render_template('index.html', profile=profile, title='Boleias ISMAT', rides=rides, vehicles=vehicles)
@@ -48,7 +48,7 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 login_user(user)
-                return "Login com sucesso"
+                return redirect('/')
             else:
                 return "Password Invalida"
         else:
@@ -89,7 +89,7 @@ def register():  # put application's code here
 @login_required
 def logout():
     logout_user()
-    return "User Logout"
+    return redirect('/login')
 
 
 @app.route('/profile', methods=['GET'])
@@ -244,7 +244,50 @@ def getUserRating(user_id):
     return jsonify(rating = profile.classification)
 
 
+@app.route('/reservation/<ride_id>', methods=['POST'])
+@login_required
+def reservation(ride_id):
+    new_reservation = Reservation(user_id=current_user.id, ride_id=int(ride_id))
+    db.session.add(new_reservation)
+    db.session.commit()
+    return "reserva concluida"
 
+
+@app.route('/minhasBoleias', methods=['GET'])
+@login_required
+def minhasBoleias():
+    profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
+    boleias = db.session.execute("""SELECT r.id,r.user_id,to_char(r.ride_date,'MM') AS ride_date_month,
+                                   to_char(r.ride_date,'DD') AS ride_date_day,to_char(r.ride_hour,'HH')AS ride_hours,
+                                   to_char(r.ride_hour,'MI')AS ride_minutes,r.number_of_available_seats,r.status,r.origin,r.destination
+                                   FROM ride AS r WHERE (r.status = 'Aberta' OR r.status = 'Confirmada') AND r.user_id = """ + str(
+        current_user.id)).all()
+    historicos = db.session.execute("""SELECT r.id,r.user_id,to_char(r.ride_date,'MM') AS ride_date_month,
+                                   to_char(r.ride_date,'DD') AS ride_date_day,to_char(r.ride_hour,'HH')AS ride_hours,
+                                   to_char(r.ride_hour,'MI')AS ride_minutes,r.number_of_available_seats,r.status,r.origin,r.destination
+                                   FROM ride AS r WHERE (r.status = 'Concluida' OR r.status = 'Cancelada') AND r.user_id = """ + str(
+        current_user.id)).all()
+    for historico in historicos:
+        print(historico)
+
+    return render_template('minhasBoleias.html', profile=profile, boleias=boleias, historicos=historicos)
+
+
+@app.route('/minhasReservas', methods=['GET'])
+@login_required
+def minhasReservas():
+    profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
+    reservas = db.session.execute("""SELECT r.id,r.user_id,to_char(r.ride_date,'MM') AS ride_date_month,
+                                   to_char(r.ride_date,'DD') AS ride_date_day,to_char(r.ride_hour,'HH')AS ride_hours,
+                                   to_char(r.ride_hour,'MI')AS ride_minutes,r.number_of_available_seats,rs.status,r.origin,r.destination
+                                   FROM ride AS r ,reservation as rs WHERE (rs.status = 'Aberta' OR rs.status = 'Confirmada') AND rs.ride_id = r.id AND rs.user_id = """ + str(
+        current_user.id)).all()
+    historicos = db.session.execute("""SELECT r.id,r.user_id,to_char(r.ride_date,'MM') AS ride_date_month,
+                                   to_char(r.ride_date,'DD') AS ride_date_day,to_char(r.ride_hour,'HH')AS ride_hours,
+                                   to_char(r.ride_hour,'MI')AS ride_minutes,r.number_of_available_seats,rs.status,r.origin,r.destination
+                                   FROM ride AS r ,reservation as rs WHERE (rs.status = 'Concluida' OR rs.status = 'Cancelada') AND rs.ride_id = r.id AND rs.user_id = """ + str(
+        current_user.id)).all()
+    return render_template('minhasReservas.html', profile=profile, reservas=reservas, historicos=historicos)
 
 if __name__ == '__main__':
     app.run(debug=True)

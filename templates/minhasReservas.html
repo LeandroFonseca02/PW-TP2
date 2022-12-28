@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container">
+  <div class="col d-flex flex-column justify-content-center align-items-center ">
+    <div class="card flex-column d-flex justify-content-center align-items-center boleia-card-shadow" style="width: 85%;">
+      <div class="card-blocker"></div>
+      <div>
+        <h5>Reservas Ativas</h5>
+      </div>
+
+      <div class="content-wrapper" style="width: 90%">
+        <hr class="hr" />
+
+        <div id="reservasAtivas">
+          {% for reserva in reservas %}
+                    <div class="content">
+                        <div class="card boleia-card boleia-card-shadow mt-3">
+                            <div class="card-body">
+                                <div class="d-flex flex-row boleia-header align-items-center gap-4">
+                                    <img class="ms-4 d-lg-block d-md-none car-card-image"
+                                         src="../static/images/car-placeholder.png" alt="Car" style="height: 64px;">
+                                    <div class="col">
+                                        <div class="align-self-start card-header-text">{{ reserva.origin }} - {{ reserva.destination }}</div>
+                                    </div>
+                                    <div class="col card-header-text">{{ reserva.status }}</div>
+                                    <div class="card-header-text">{{ reserva.ride_date_day }}/{{ reserva.ride_date_month }}</div>
+                                    <div class="card-header-text">{{ reserva.ride_hours }}:{{ reserva.ride_minutes }}</div>
+                                    <div>
+                                        <button class="btn" type="button" data-bs-toggle="collapse"
+                                                aria-expanded="false"
+                                                aria-controls="#cardContent{{ reserva.id }}" onclick="changeExpandIcon(this)"
+                                                name="{{ reserva.id }}">
+                                            <img src="../static/images/icons/icon-down.svg" style="height: 24px" alt="expandir">
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collapse" id="cardContent{{ reserva.id }}">
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+        </div>
+
+
+        <div class="mt-4 d-flex justify-content-center align-items-center">
+          <button type="button" class="show-more" onclick="showMoreContent(this)">Mostrar mais</button>
+        </div>
+      </div>
+
+
+      <div style="width: 90%"><hr class="hr" /></div>
+      <div class="card-blocker"></div>
+    </div>
+  </div></div>
+<div class="card-blocker"></div>
+<div class="container">
+  <div class="col d-flex flex-column justify-content-center align-items-center ">
+    <div class="card flex-column d-flex justify-content-center align-items-center boleia-card-shadow" style="width: 85%;">
+      <div class="card-blocker"></div>
+      <div>
+        <h5>Histórico de Reservas</h5>
+      </div>
+
+      <div class="content-wrapper" style="width: 90%">
+        <hr class="hr" />
+        <div id="reservasHistorico">
+          {% for historico in historicos %}
+                    <div class="content" style="display: block;">
+                        <div class="card boleia-card boleia-card-shadow mt-3">
+                            <div class="card-body">
+                                <div class="d-flex flex-row boleia-header align-items-center gap-4">
+                                    <img class="ms-4 d-lg-block d-md-none car-card-image"
+                                         src="../static/images/car-placeholder.png" alt="Car" style="height: 64px;">
+                                    <div class="col">
+                                        <div class="align-self-start card-header-text">{{ historico.origin }} - {{ historico.destination }}</div>
+                                    </div>
+                                    <div class="col card-header-text">{{ historico.status }}</div>
+                                    <div class="card-header-text">{{ historico.ride_date_day }}/{{ historico.ride_date_month }}</div>
+                                    <div class="card-header-text">{{ historico.ride_hours }}:{{ historico.ride_minutes }}</div>
+                                    <div>
+                                        <button class="btn" type="button" data-bs-toggle="collapse"
+                                                aria-expanded="false"
+                                                aria-controls="#cardContent{{ historico.id }}" onclick="changeExpandIcon(this)"
+                                                name="{{ historico.id }}">
+                                            <img src="../static/images/icons/icon-down.svg" style="height: 24px" alt="expandir">
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collapse" id="cardContent{{ historico.id }}">
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+        </div>
+
+
+        <div class="mt-4 d-flex justify-content-center align-items-center">
+          <button type="button" class="show-more" onclick="showMoreContent(this)">Mostrar mais</button>
+        </div>
+      </div>
+
+
+      <div style="width: 90%"><hr class="hr" /></div>
+      <div class="card-blocker"></div>
+    </div>
+  </div>
+</div>
+<script src="../static/js/showMoreButton.js"></script>
+{% endblock %}
