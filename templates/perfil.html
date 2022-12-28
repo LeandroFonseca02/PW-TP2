@@ -162,57 +162,23 @@
                         </div>
                     </div>
                     <div class="col-3 mt-4 mb-3">
-                        <button type="submit" class="btn-ismat-large">Guardar</button>
+                        <button type="submit" class="btn-ismat-large" name="{{profile.classification}}" onload='starRatingGenerator(document.getElementById("profileRating"),this.name)'>Guardar</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
 {% set classification = profile.classification %}
-
 <script src="../static/js/script.js"></script>
+
 <script>
-    function sendUploadImage() {
-        document.getElementById("photoForm").submit();
-    }
-
-    let data = [
-        {
-            user_id: "1",
-            email: "a@a.com",
-            firstName: "Maria",
-            lastName: "João",
-            photo: "./images/profilePictures/b.jpeg",
-            phoneNumber: "123456789",
-            rating: "4.7"
-        }
-    ]
-
-    let vehicles = [
-        {
-            marca: "Peugeot",
-            modelo: "106",
-            cor: "Branco",
-            matricula: "AL-52-98"
-        },
-        {
-            marca: "Audi",
-            modelo: "R8",
-            cor: "Vermelho",
-            matricula: "83-OK-39"
-        },
-        {
-            marca: "Renault",
-            modelo: "Clio",
-            cor: "Preto",
-            matricula: "03-72-KR"
-        }
-    ];
     let classification = "{{ profile.classification }}"
     starRatingGenerator(document.getElementById("profileRating"), classification)
 </script>
+{% endblock %}
+
+
 
 
 </body>

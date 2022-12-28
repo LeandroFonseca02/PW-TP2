@@ -1,3 +1,7 @@
+function sendUploadImage() {
+    document.getElementById("photoForm").submit();
+}
+
 function getUserModal(user_id){
     modalWrapper = document.getElementById("modalsProfile");
     fetch('/getProfileModal/'+user_id, {

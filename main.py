@@ -109,6 +109,7 @@ def uploadImage():  # put application's code here
         f.save(os.path.join(UPLOAD_FOLDER, filename))
         profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
         profile.photo = UPLOAD_FOLDER + filename
+        print(profile.photo)
         db.session.commit()
         return redirect("/profile")
 
