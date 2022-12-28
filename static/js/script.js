@@ -2,6 +2,25 @@ function sendUploadImage() {
     document.getElementById("photoForm").submit();
 }
 
+function getVehicles() {
+    carWrapper = document.getElementById("carManagerWrapper");
+    fetch('/getVehicles', {
+        method: "GET"
+    }).then(response => {
+        return response.text();
+    }).then(html => {
+        carWrapper.innerHTML = html;
+    });
+}
+
+function deleteVehicles(vehicle_id) {
+    fetch('/deleteVehicle/'+vehicle_id, {
+            method:"PATCH",
+            headers:{'Content-Type': 'application/json'},
+            body:JSON.stringify({vehicle:vehicle_id})
+    })
+}
+
 function getUserModal(user_id){
     modalWrapper = document.getElementById("modalsProfile");
     fetch('/getProfileModal/'+user_id, {

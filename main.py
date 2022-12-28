@@ -50,7 +50,7 @@ def index():  # put application's code here
         AND rs.user_id != """+str(current_user.id)).all()
 
     profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
-    vehicles = db.session.query(Vehicle).filter(Vehicle.user_id == current_user.id).all()
+    vehicles = db.session.query(Vehicle).filter(Vehicle.user_id == current_user.id, Vehicle.is_deleted == False).all()
     return render_template('index.html', profile=profile, title='Boleias ISMAT', rides=rides, vehicles=vehicles)
 
 
@@ -111,8 +111,14 @@ def logout():
 @login_required
 def profile():  # put application's code here
     profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
-    vehicles = db.session.query(Vehicle).filter(Vehicle.user_id == current_user.id)
-    return render_template('perfil.html', email=current_user.email, profile=profile, vehicles=vehicles)
+    return render_template('perfil.html', email=current_user.email, profile=profile)
+
+
+@app.route('/getVehicles', methods=['GET'])
+@login_required
+def get_vehicles():  # put application's code here
+    vehicles = db.session.query(Vehicle).filter(Vehicle.user_id == current_user.id, Vehicle.is_deleted == False).all()
+    return render_template('car-manager.html', vehicles=vehicles)
 
 
 @app.route('/uploadImage', methods=['POST'])
@@ -179,8 +185,18 @@ def createVehicle():  # put application's code here
                               brand=brand, model=model)
         db.session.add(new_vehicle)
         db.session.commit()
-        return redirect('/profile')
+        return redirect('/')
 
+
+@app.route('/deleteVehicle/<vehicle_id>', methods=['PATCH'])
+@login_required
+def delete_ride(vehicle_id):
+    if request.method == 'PATCH':
+        vehicle = db.session.query(Vehicle).filter(Vehicle.id == int(vehicle_id)).first()
+        vehicle.is_deleted = True
+        db.session.commit()
+
+        return redirect('/')
 
 @app.route('/createRide', methods=['POST'])
 @login_required
