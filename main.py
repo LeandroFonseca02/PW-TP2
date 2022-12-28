@@ -6,6 +6,10 @@ from flask import Flask, render_template, request, redirect, jsonify
 from flask_login import login_required, login_user, logout_user, current_user, LoginManager
 from models import *
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/rides'
@@ -17,6 +21,7 @@ login_manager = LoginManager()
 login_manager.login_view = '/login'
 login_manager.init_app(app)
 
+#Create a Form Class
 
 @login_manager.user_loader
 def load_user(id):
