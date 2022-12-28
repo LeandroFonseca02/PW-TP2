@@ -1,4 +1,3 @@
-import json
 import os
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,9 +6,7 @@ from flask_login import login_required, login_user, logout_user, current_user, L
 from models import *
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from forms import LoginForm, RegisterForm
 
 
 app = Flask(__name__)
@@ -79,7 +76,11 @@ def index():  # put application's code here
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    if request.method == 'POST':
+    form = LoginForm()
+
+    if form.is_submitted():
+        for key,values in request.form.items():
+            print("key: " + key + "\tValue: " + values)
         email = request.form.get('email')
         password = request.form.get('password')
         user = db.session.query(User).filter(User.email == email).first()
@@ -92,12 +93,16 @@ def login():
         else:
             return "Este email nao pertence a nenhuma conta"
     else:
-        return render_template('login.html')
+        return render_template('login.html',form=form)
 
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():  # put application's code here
-    if request.method == 'POST':
+    form = RegisterForm()
+    if form.is_submitted():
+        for key, values in request.form.items():
+            print("key: " + key + "\tValue: " + values)
+
         email = request.form.get('email')
         firstname = request.form.get('firstname')
         lastname = request.form.get('lastname')
@@ -120,7 +125,7 @@ def register():  # put application's code here
                 login_user(new_user)
                 return redirect('/')
     else:
-        return render_template('criar-utilizador.html')
+        return render_template('criar-utilizador.html', form=form)
 
 
 @app.route('/logout')
