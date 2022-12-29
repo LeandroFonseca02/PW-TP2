@@ -2,14 +2,14 @@ import os
 from flask import Blueprint, request, redirect, render_template, jsonify
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
+
+from config.config import UPLOAD_FOLDER
 from models.profile import Profile
 from models.ride import Ride
 from models.user import User
 
-UPLOAD_FOLDER = './static/images/profilePictures/'
 
-
-profiles  = Blueprint('profiles', __name__, template_folder='templates')
+profiles = Blueprint('profiles', __name__, template_folder='templates')
 
 @profiles.route('/profile', methods=['GET'])
 @login_required

@@ -2,6 +2,8 @@ import datetime
 from dataclasses import dataclass
 import jwt
 from flask_security import UserMixin
+
+from config.config import SECRET_KEY
 from controllers.db import db
 from models.role import roles_users_table, Role
 
@@ -68,7 +70,7 @@ class User(db.Model, UserMixin):
         }
         encoded_jwt = jwt.encode(
                 payload,
-                str(app.config['SECRET_KEY']),
+                str(SECRET_KEY),
                 algorithm='HS256'
         )
 
@@ -79,7 +81,7 @@ class User(db.Model, UserMixin):
         try:
             data = jwt.decode(
                 token,
-                str(app.config['SECRET_KEY']),
+                str(SECRET_KEY),
                 leeway=datetime.timedelta(seconds=10),
                 algorithms=["HS256"]
             )

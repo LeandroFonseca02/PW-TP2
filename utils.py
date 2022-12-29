@@ -1,7 +1,7 @@
 from flask import url_for
 from flask_mail import Message, Mail
 
-mail = Mail(app = None)
+mail = Mail()
 
 
 def sendRecoverPasswordEmail(user):
@@ -12,7 +12,7 @@ def sendRecoverPasswordEmail(user):
         recipients=[user.email]
     )
     msg.body = f'''Para recuperar a sua password, entre no seguinte link:
-    {url_for('reset_token', token=token, _external=True)}
+    {url_for('auth.reset_token', token=token, _external=True)}
 
     Se não foi você que fez o pedido de recuperação ignore este email.
     '''
