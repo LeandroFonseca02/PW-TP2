@@ -45,6 +45,15 @@ function reservation(ride_id){
     })
 }
 
+function cancelReservation(ride_id){
+    fetch('/cancel/reservation/'+ride_id, {
+        method:"POST",
+        headers:{'Content-Type': 'application/json'},
+        body:JSON.stringify({ride_id:ride_id})
+    })
+}
+
+
 function createStar(div,score){
     let star;
     if(score >= 0 && score < 0.5){
