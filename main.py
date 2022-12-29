@@ -57,23 +57,26 @@ def sendRecoverPasswordEmail(user):
 @login_required
 def index():  # put application's code here
     rides = db.session.execute("""
-    SELECT r.id,
-        r.user_id,
-        to_char(r.ride_date, 'MM') AS ride_date_month,
-        to_char(r.ride_date, 'DD') AS ride_date_day,
-        to_char(r.ride_hour, 'HH') AS ride_hours,
-        to_char(r.ride_hour, 'MI') AS ride_minutes,
-        r.number_of_available_seats,
-        r.status,
-        r.origin,
-        r.destination
-    FROM ride AS r,
-        reservation AS rs
-    WHERE r.status = 'Aberta'
-        AND rs.ride_id = r.id
-        AND rs.is_driver = FALSE
-        AND r.user_id != """+str(current_user.id) +"""
-        AND rs.user_id != """+str(current_user.id)).all()
+SELECT DISTINCT r.id,
+                rs.user_id,
+                to_char(r.ride_date, 'MM') AS ride_date_month,
+                to_char(r.ride_date, 'DD') AS ride_date_day,
+                to_char(r.ride_hour, 'HH') AS ride_hours,
+                to_char(r.ride_hour, 'MI') AS ride_minutes,
+                r.number_of_available_seats,
+                r.status,
+                r.origin,
+                r.destination,
+                rs.is_driver
+FROM ride AS r,reservation rs
+WHERE r.status = 'Aberta'
+  AND rs.ride_id = r.id
+  AND rs.is_driver = TRUE
+  AND r.id NOT IN (
+        SELECT DISTINCT r.id
+        FROM ride AS r
+            INNER JOIN reservation rs ON r.id = rs.ride_id
+        WHERE rs.user_id = """+str(current_user.id)+""")""").all()
 
     profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
     vehicles = db.session.query(Vehicle).filter(Vehicle.user_id == current_user.id, Vehicle.is_deleted == False).all()
