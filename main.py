@@ -71,7 +71,7 @@ def index():  # put application's code here
         reservation AS rs
     WHERE r.status = 'Aberta'
         AND rs.ride_id = r.id
-        AND rs.is_driver = FALSE
+        AND rs.is_driver = TRUE
         AND r.user_id != """+str(current_user.id)+"""
         AND rs.user_id != """+str(current_user.id)).all()
 
@@ -218,7 +218,7 @@ def createVehicle():  # put application's code here
                               brand=brand, model=model)
         db.session.add(new_vehicle)
         db.session.commit()
-        return redirect('/')
+        return redirect('/profile')
 
 
 @app.route('/deleteVehicle/<vehicle_id>', methods=['PATCH'])
