@@ -94,14 +94,53 @@ class Ride(db.Model):
         db.session.commit()
         Reservation.create_reservation(Reservation(user_id=ride.user_id, ride_id=ride.id, is_driver=True))
 
-    # def __init__(self, user_id, vehicle_id, ride_date, number_of_available_seats, status, origin, destination,
-    #              created_at, updated_at):
-    #     self.user_id = user_id
-    #     self.vehicle_id = vehicle_id
-    #     self.ride_date = ride_date
-    #     self.number_of_available_seats = number_of_available_seats
-    #     self.status = status
-    #     self.origin = origin
-    #     self.destination = destination
-    #     self.created_at = created_at
-    #     self.updated_at = updated_at
+
+    @staticmethod
+    def get_active_rides(user_id):
+        query = """
+            SELECT r.id,
+               r.user_id,
+               to_char(r.ride_date, 'MM') AS ride_date_month,
+               to_char(r.ride_date, 'DD') AS ride_date_day,
+               to_char(r.ride_hour, 'HH') AS ride_hours,
+               to_char(r.ride_hour, 'MI') AS ride_minutes,
+               r.number_of_available_seats,
+               r.status,
+               r.origin,
+               r.destination
+            FROM ride AS r
+            WHERE (r.status = 'Aberta' OR r.status = 'Confirmada')
+            AND r.user_id =""" + str(user_id)
+        return db.session.execute(query).all()
+
+
+    @staticmethod
+    def get_historic_rides(user_id):
+        query = """
+            SELECT r.id,
+               r.user_id,
+               to_char(r.ride_date, 'MM') AS ride_date_month,
+               to_char(r.ride_date, 'DD') AS ride_date_day,
+               to_char(r.ride_hour, 'HH') AS ride_hours,
+               to_char(r.ride_hour, 'MI') AS ride_minutes,
+               r.number_of_available_seats,
+               r.status,
+               r.origin,
+               r.destination
+            FROM ride AS r
+            WHERE (r.status = 'Concluida' OR r.status = 'Cancelada')
+              AND r.user_id =""" + str(user_id)
+        return db.session.execute(query).all()
+
+
+        # def __init__(self, user_id, vehicle_id, ride_date, number_of_available_seats, status, origin, destination,
+        #              created_at, updated_at):
+        #     self.user_id = user_id
+        #     self.vehicle_id = vehicle_id
+        #     self.ride_date = ride_date
+        #     self.number_of_available_seats = number_of_available_seats
+        #     self.status = status
+        #     self.origin = origin
+        #     self.destination = destination
+        #     self.created_at = created_at
+        #     self.updated_at = updated_at

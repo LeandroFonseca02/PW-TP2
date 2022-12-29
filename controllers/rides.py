@@ -2,6 +2,7 @@ import re
 from flask import Blueprint, request, redirect, render_template
 from flask_login import login_required, current_user
 
+from models.profile import Profile
 from models.ride import Ride
 from models.vehicle import Vehicle
 
@@ -31,3 +32,12 @@ def getRideData(ride_id, card_type):
     ride = Ride.get_ride_by_id(ride_id)
     vehicle = Vehicle.get_vehicle_by_id(ride.vehicle_id)
     return render_template('card-content.html', passengers=passengers, ride=ride, vehicle=vehicle, card_type=card_type)
+
+@rides.route('/minhasBoleias', methods=['GET'])
+@login_required
+def minhasBoleias():
+    profile = Profile.get_profile(current_user.id)
+    boleias = Ride.get_active_rides(current_user.id)
+    historicos = Ride.get_historic_rides(current_user.id)
+
+    return render_template('minhasBoleias.html', profile=profile, boleias=boleias, historicos=historicos)
