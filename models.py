@@ -1,17 +1,17 @@
 import flask
 import flask_sqlalchemy
 from sqlalchemy.orm import backref
-from datetime import datetime
+import datetime
 from flask_security import (RoleMixin, UserMixin)
 from dataclasses import dataclass
-
+import jwt
+from main import app
 
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/rides'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = flask_sqlalchemy.SQLAlchemy(app)
-
 
 roles_users_table = db.Table(
     "role_user",
@@ -46,6 +46,35 @@ class User(db.Model, UserMixin):
     def __str__(self):
         return self.email
 
+    def get_reset_token(self, expire_sec=1800):
+        payload = {
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=1800),
+            'iat': datetime.datetime.utcnow(),
+            'user_id': self.id
+        }
+        encoded_jwt = jwt.encode(
+                payload,
+                str(app.config['SECRET_KEY']),
+                algorithm='HS256'
+        )
+
+        print(encoded_jwt)
+        return encoded_jwt
+
+    @staticmethod
+    def verify_reset_token(token):
+        try:
+            data = jwt.decode(
+                token,
+                str(app.config['SECRET_KEY']),
+                leeway=datetime.timedelta(seconds=10),
+                algorithms=["HS256"]
+            )
+        except:
+            return None
+
+        return data.get('user_id')
+
     # def __repr__(self):
     #     return "<User %r>" % self.email
 
@@ -54,6 +83,7 @@ class User(db.Model, UserMixin):
     #     self.password = password
     #     self.active = active
     #
+
 
 @dataclass
 class Role(db.Model, RoleMixin):
@@ -90,7 +120,7 @@ class Profile(db.Model):
     user = db.relationship('User', backref='profile')
     first_name = db.Column(db.String(30))
     last_name = db.Column(db.String(30))
-    registration_date = db.Column(db.DateTime, default=datetime.utcnow())
+    registration_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     photo = db.Column(db.Text, default='../static/images/icons/profile-icon.svg')
     phone_number = db.Column(db.String(30), unique=True)
     classification = db.Column(db.Float(), db.CheckConstraint('classification >= 1 AND classification <= 5'),
@@ -130,8 +160,8 @@ class Vehicle(db.Model):
     brand = db.Column(db.String(50))
     model = db.Column(db.String(50))
     is_deleted = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow())
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow())
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
 
     # def __init__(self, user_id, license_plate, color, is_deleted, brand, model, created_at, updated_at):
     #     self.user_id = user_id
@@ -173,8 +203,8 @@ class Ride(db.Model):
     origin = db.Column(db.String(50))
     destination = db.Column(db.String(50))
     description = db.Column(db.String(250))
-    created_at = db.Column(db.DateTime, default=datetime.now)
-    updated_at = db.Column(db.DateTime, default=datetime.now)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.datetime.now)
 
     # def __init__(self, user_id, vehicle_id, ride_date, number_of_available_seats, status, origin, destination,
     #              created_at, updated_at):
@@ -208,8 +238,8 @@ class Reservation(db.Model):
     ride = db.relationship('Ride', backref='reservation')
     status = db.Column(db.String(50), default='Aberta')
     is_driver = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.now)
-    updated_at = db.Column(db.DateTime, default=datetime.now)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.datetime.now)
 
     # def __init__(self, user_id, ride_id, created_at, updated_at):
     #     self.user_id = user_id
@@ -221,4 +251,3 @@ class Reservation(db.Model):
 if __name__ == "__main__":
     app.app_context().push()
     db.create_all()
-

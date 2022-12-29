@@ -1,19 +1,20 @@
 import os
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, jsonify, url_for
 from flask_login import login_required, login_user, logout_user, current_user, LoginManager
 from models import *
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm, RequestResetForm, ResetPasswordForm
+
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/rides'
 UPLOAD_FOLDER = './static/images/profilePictures/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['SECRET_KEY'] = 'cena secreta'
+app.config['SECRET_KEY'] = 'secret'
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
@@ -27,7 +28,6 @@ login_manager = LoginManager()
 login_manager.login_view = '/login'
 login_manager.init_app(app)
 
-#Create a Form Class
 
 @login_manager.user_loader
 def load_user(id):
@@ -38,13 +38,19 @@ with app.app_context():
     db = SQLAlchemy(app)
 
 def sendRecoverPasswordEmail(user):
+    token = user.get_reset_token()
     msg = Message(
     'Recuperação de Password - Boleias ISMAT',
     sender = 'boleiasismat@gmail.com',
     recipients = [user.email]
     )
-    msg.body = 'Boleias ISMAT'
+    msg.body = f'''Para recuperar a sua password, entre no seguinte link:
+    {url_for('reset_token',token=token, _external=True)}
+    
+    Se não foi você que fez o pedido de recuperação ignore este email.
+    '''
     mail.send(msg)
+    print("Email enviado")
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -76,13 +82,13 @@ def index():  # put application's code here
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    if current_user.is_authenticated:
+        return redirect('/')
     form = LoginForm()
 
     if form.is_submitted():
-        for key,values in request.form.items():
-            print("key: " + key + "\tValue: " + values)
-        email = request.form.get('email')
-        password = request.form.get('password')
+        email = form.email.data
+        password = form.password.data
         user = db.session.query(User).filter(User.email == email).first()
         if user:
             if check_password_hash(user.password, password):
@@ -98,17 +104,16 @@ def login():
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():  # put application's code here
+    if current_user.is_authenticated:
+        return redirect('/')
     form = RegisterForm()
     if form.is_submitted():
-        for key, values in request.form.items():
-            print("key: " + key + "\tValue: " + values)
-
-        email = request.form.get('email')
-        firstname = request.form.get('firstname')
-        lastname = request.form.get('lastname')
-        phone = request.form.get('phone')
-        password = request.form.get('password')
-        confirm_password = request.form.get('confirm_password')
+        email = form.email.data
+        firstname = form.first_name.data
+        lastname = form.last_name.data
+        phone = form.phone.data
+        password = form.password.data
+        confirm_password = form.confirm_password.data
         user = db.session.query(User).filter(User.email == email).first()
         if user:
             return "Email ja esta a ser utilizado"
@@ -218,7 +223,7 @@ def createVehicle():  # put application's code here
 
 @app.route('/deleteVehicle/<vehicle_id>', methods=['PATCH'])
 @login_required
-def delete_ride(vehicle_id):
+def delete_vehicle(vehicle_id):
     if request.method == 'PATCH':
         vehicle = db.session.query(Vehicle).filter(Vehicle.id == int(vehicle_id)).first()
         vehicle.is_deleted = True
@@ -403,6 +408,49 @@ def minhasReservas():
       AND rs.user_id =""" + str(current_user.id)).all()
 
     return render_template('minhasReservas.html', profile=profile, reservas=reservas, historicos=historicos)
+
+
+@app.route('/reset_password', methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect('/')
+    form = RequestResetForm()
+    if form.is_submitted():
+        user = db.session.query(User).filter(User.email == form.email.data).first()
+        sendRecoverPasswordEmail(user)
+        return redirect('/login')
+    return render_template('reset_request.html', form=form)
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect('/')
+    user_id = User.verify_reset_token(token)
+    if user_id is None:
+        print('Token inválido ou expirado')
+        return redirect('/reset_password')
+    form = ResetPasswordForm()
+
+    if form.is_submitted():
+        password = form.password.data
+        confirm_password = form.confirm_password.data
+        if password != confirm_password:
+            return "Passwords diferentes"
+        else:
+            user = db.session.query(User).filter(User.id == user_id).first()
+            user.password = generate_password_hash(password, method='sha256')
+            db.session.commit()
+
+            return redirect('/login')
+
+    return render_template('reset_token.html', form=form)
+
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
