@@ -57,7 +57,7 @@ def sendRecoverPasswordEmail(user):
 @login_required
 def index():  # put application's code here
     rides = db.session.execute("""
-    SELECT r.id,
+        SELECT r.id,
         r.user_id,
         to_char(r.ride_date, 'MM') AS ride_date_month,
         to_char(r.ride_date, 'DD') AS ride_date_day,
@@ -70,9 +70,9 @@ def index():  # put application's code here
     FROM ride AS r,
         reservation AS rs
     WHERE r.status = 'Aberta'
-        AND rs.ride_id = r.id
-        AND rs.is_driver = TRUE
-        AND r.user_id != """+str(current_user.id)+"""
+--         AND rs.ride_id = r.id
+        AND rs.is_driver = FALSE
+        AND r.user_id != """+str(current_user.id) + """
         AND rs.user_id != """+str(current_user.id)).all()
 
     profile = db.session.query(Profile).filter(Profile.user_id == current_user.id).first()
