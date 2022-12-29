@@ -48,7 +48,7 @@ class User(db.Model, UserMixin):
 
     def get_reset_token(self, expire_sec=1800):
         payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=1800),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=expire_sec),
             'iat': datetime.datetime.utcnow(),
             'user_id': self.id
         }
@@ -58,7 +58,6 @@ class User(db.Model, UserMixin):
                 algorithm='HS256'
         )
 
-        print(encoded_jwt)
         return encoded_jwt
 
     @staticmethod
