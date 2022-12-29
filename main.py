@@ -257,9 +257,9 @@ def create_ride():
         return redirect('/')
 
 
-@app.route('/getRideData/<ride_id>', methods=['GET'])
+@app.route('/getRideData/<ride_id>/<card_type>', methods=['GET'])
 @login_required
-def getRideData(ride_id):
+def getRideData(ride_id, card_type):
     passengers_query = """
     SELECT u.id AS user_id,
         email,
@@ -277,7 +277,7 @@ def getRideData(ride_id):
     passengers = db.session.execute(passengers_query).all()
     ride = db.session.query(Ride).filter(Ride.id == int(ride_id)).first()
     vehicle = db.session.query(Vehicle).filter(Vehicle.id == ride.vehicle_id).first()
-    return render_template('card-content.html', passengers=passengers, ride=ride, vehicle=vehicle)
+    return render_template('card-content.html', passengers=passengers, ride=ride, vehicle=vehicle, card_type=card_type)
 
 
 @app.route('/getRideRating/<ride_id>', methods=['GET'])

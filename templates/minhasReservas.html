@@ -28,7 +28,7 @@
                                     <div>
                                         <button class="btn" type="button" data-bs-toggle="collapse"
                                                 aria-expanded="false"
-                                                aria-controls="#cardContent{{ reserva.id }}" onclick="changeExpandIcon(this)"
+                                                aria-controls="#cardContent{{ reserva.id }}" onclick="changeExpandIcon(this, 'reserva')"
                                                 name="{{ reserva.id }}">
                                             <img src="../static/images/icons/icon-down.svg" style="height: 24px" alt="expandir">
                                         </button>
@@ -83,7 +83,7 @@
                                     <div>
                                         <button class="btn" type="button" data-bs-toggle="collapse"
                                                 aria-expanded="false"
-                                                aria-controls="#cardContent{{ historico.id }}" onclick="changeExpandIcon(this)"
+                                                aria-controls="#cardContent{{ historico.id }}" onclick="changeExpandIcon(this, 'historico')"
                                                 name="{{ historico.id }}">
                                             <img src="../static/images/icons/icon-down.svg" style="height: 24px" alt="expandir">
                                         </button>

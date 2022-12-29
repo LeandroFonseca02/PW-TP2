@@ -89,12 +89,11 @@ function starRatingGenerator(element,rating){
 
 }
 
-function changeExpandIcon(element) {
+function changeExpandIcon(element, type) {
     let img = element.querySelector("img");
     cardContent = document.getElementById("cardContent"+element.name);
 
-
-    fetch('/getRideData/'+element.name, {
+    fetch('/getRideData/'+element.name+'/'+type, {
         method: "GET"
     }).then(response => {
         return response.text();
