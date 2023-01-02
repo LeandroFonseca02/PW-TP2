@@ -80,7 +80,7 @@ class Ride(db.Model):
              JOIN profile p ON u.id = p.user_id
              JOIN reservation r ON u.id = r.user_id
              JOIN ride r2 ON r2.id = r.ride_id
-        WHERE r.status = 'Aberta' AND r2.id =
+        WHERE r.status != 'Cancelada' AND r2.id =
         """ + ride_id
 
         return db.session.execute(query).all()
@@ -163,16 +163,25 @@ class Ride(db.Model):
     def confirm_ride(ride_id):
         ride = Ride.get_ride_by_id(int(ride_id))
         ride.status = 'Confirmada'
+        reservations = Reservation.get_reservations_by_ride_id(ride_id)
+        for reservation in reservations:
+            reservation.status = 'Confirmada'
         db.session.commit()
 
     @staticmethod
     def cancel_ride(ride_id):
         ride = Ride.get_ride_by_id(int(ride_id))
         ride.status = 'Cancelada'
+        reservations = Reservation.get_reservations_by_ride_id(ride_id)
+        for reservation in reservations:
+            reservation.status = 'Cancelada'
         db.session.commit()
 
     @staticmethod
     def finalize_ride(ride_id):
         ride = Ride.get_ride_by_id(int(ride_id))
         ride.status = 'Concluida'
+        reservations = Reservation.get_reservations_by_ride_id(ride_id)
+        for reservation in reservations:
+            reservation.status = 'Concluida'
         db.session.commit()

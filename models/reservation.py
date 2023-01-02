@@ -91,8 +91,7 @@ class Reservation(db.Model):
         reservation.status = 'Cancelada'
         db.session.commit()
 
-    # def __init__(self, user_id, ride_id, created_at, updated_at):
-    #     self.user_id = user_id
-    #     self.ride_id = ride_id
-    #     self.created_at = created_at
-    #     self.updated_at = updated_at
+    @staticmethod
+    def get_reservations_by_ride_id(ride_id):
+        return db.session.query(Reservation).filter(Reservation.ride_id == ride_id).all()
+
