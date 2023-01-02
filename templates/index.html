@@ -105,24 +105,20 @@
                     </div>
                     <form class="row g-3" action="/searchRide" method="POST">
                         <div class="col-6">
-                            <label for="inputPesquisarOrigem" class="form-label">Origem</label>
-                            <input type="text" class="form-control input-shadow form-ismat inputOrigem" name="inputOrigem"
-                                   placeholder="Origem" id="inputPesquisarOrigem">
+                            {{search_form.inputOrigem.label(class_='form-label')}}
+                            {{search_form.inputOrigem(class_='form-control input-shadow form-ismat inputOrigem', placeholder='Origem')}}
                         </div>
                         <div class="col-6">
-                            <label for="inputPesquisarDestino" class="form-label">Destino</label>
-                            <input type="text" class="form-control input-shadow form-ismat inputDestino" name="inputDestino"
-                                   placeholder="Destino" id="inputPesquisarDestino" value="ISMAT">
+                            {{search_form.inputDestino.label(class_='form-label')}}
+                            {{search_form.inputDestino(class_='form-control input-shadow form-ismat inputDestino', placeholder='Destino', readonly=true)}}
                         </div>
                         <div class="col-6">
-                            <label for="inputPesquisarData" class="form-label">Data</label>
-                            <input type="date" class="form-control input-shadow form-ismat" name="inputData"
-                                   placeholder="00/00/0000" id="inputPesquisarData">
+                            {{search_form.inputData.label(class_='form-label')}}
+                            {{search_form.inputData(class_='form-control input-shadow form-ismat', placeholder='Data')}}
                         </div>
                         <div class="col-6">
-                            <label for="inputPesquisarHora" class="form-label">Hora</label>
-                            <input type="time" class="form-control input-shadow form-ismat" name="inputHora"
-                                   placeholder="00:00" id="inputPesquisarHora">
+                            {{search_form.inputHora.label(class_='form-label')}}
+                            {{search_form.inputHora(class_='form-control input-shadow form-ismat', placeholder='Hora')}}
                         </div>
                         <div class="col-12 d-grid mt-4">
                             <button type="submit" class="btn-ismat-large">Pesquisar</button>
@@ -175,34 +171,28 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="inputCriarLugaresDisponiveis" class="form-label">Lugares Disponíveis</label>
-                            <input type="text" name="availableSeats" class="form-control input-shadow form-ismat"
-                                   placeholder="Lugares Disponíveis" id="inputCriarLugaresDisponiveis">
+                            {{create_form.availableSeats.label(class_='form-label')}}
+                            {{create_form.availableSeats(class_='form-control input-shadow form-ismat', placeholder='Lugares Disponíveis')}}
                         </div>
                         <div class="col-md-6">
-                            <label for="inputCriarOrigem" class="form-label">Origem</label>
-                            <input type="text" name="origin" class="form-control input-shadow form-ismat inputOrigem"
-                                   placeholder="Origem" id="inputCriarOrigem">
+                            {{create_form.origin.label(class_='form-label')}}
+                            {{create_form.origin(class_='form-control input-shadow form-ismat inputOrigem', placeholder='Origem')}}
                         </div>
                         <div class="col-md-6">
-                            <label for="inputCriarDestino" class="form-label">Destino</label>
-                            <input type="text" name="destination" class="form-control input-shadow form-ismat inputDestino"
-                                   placeholder="Destino" id="inputCriarDestino" value="ISMAT">
+                            {{create_form.destination.label(class_='form-label')}}
+                            {{create_form.destination(class_='form-control input-shadow form-ismat inputDestino', placeholder='Destino', readonly=true)}}
                         </div>
                         <div class="col-6">
-                            <label for="inputCriarData" class="form-label">Data</label>
-                            <input type="date" name="date" class="form-control input-shadow form-ismat" id="inputCriarData"
-                                   placeholder="00/00/0000">
+                            {{create_form.date.label(class_='form-label')}}
+                            {{create_form.date(class_='form-control input-shadow form-ismat', placeholder='Data')}}
                         </div>
                         <div class="col-6">
-                            <label for="inputCriarHora" class="form-label">Hora</label>
-                            <input type="time" name="hour" class="form-control input-shadow form-ismat" id="inputCriarHora"
-                                   placeholder="00:00">
+                            {{create_form.hour.label(class_='form-label')}}
+                            {{create_form.hour(class_='form-control input-shadow form-ismat', placeholder='Hora')}}
                         </div>
                         <div>
-                            <label for="inputCriarDescricao" class="form-label">Descrição</label>
-                            <textarea name="description" class="form-control input-shadow form-ismat" style="height: 180px; resize: none"
-                                      placeholder="Descrição" id="inputCriarDescricao"></textarea>
+                            {{create_form.description.label(class_='form-label')}}
+                            {{create_form.description(class_='form-control input-shadow form-ismat description-input', placeholder='Descrição')}}
                         </div>
                         <div class="col-12 d-grid">
                             <button type="submit" class="btn-ismat-large">Criar</button>

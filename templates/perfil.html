@@ -33,20 +33,20 @@
                     <div class="col d-flex flex-column justify-content-center">
                         <div class="row g-3">
                             <div class="col-6">
-                                <label for="floatingEmail">Endereço de email</label>
-                                <input value="{{email}}" name="email" type="email" class="form-control input-shadow form-ismat" id="floatingEmail" placeholder="Email">
+                                {{data_form.email.label}}
+                                {{data_form.email(class_='form-control input-shadow form-ismat', placeholder='Email')}}
                             </div>
                             <div class="col-6">
-                                <label for="floatingPhoneNumber">Telemóvel</label>
-                                <input value="{{profile.phone_number}}" name="phone" type="text" class="form-control input-shadow form-ismat" id="floatingPhoneNumber" placeholder="Telemóvel">
+                                {{data_form.phone.label}}
+                                {{data_form.phone(class_='form-control input-shadow form-ismat', placeholder='Telemóvel')}}
                             </div>
                             <div class="col-6">
-                                <label for="floatingFirstName">Nome</label>
-                                <input value="{{profile.first_name}}" name="firstname" type="text" class="form-control input-shadow form-ismat" id="floatingFirstName" placeholder="Nome">
+                                {{data_form.firstname.label}}
+                                {{data_form.firstname(class_='form-control input-shadow form-ismat', placeholder='Nome')}}
                             </div>
                             <div class="col-6">
-                                <label for="floatinglastName">Apelido</label>
-                                <input value="{{profile.last_name}}" name="lastname" type="text" class="form-control input-shadow form-ismat" id="floatinglastName" placeholder="Apelido">
+                                {{data_form.lastname.label}}
+                                {{data_form.lastname(class_='form-control input-shadow form-ismat', placeholder='Apelido')}}
                             </div>
                         </div>
                     </div>
@@ -68,20 +68,20 @@
                         <div class="modal-body">
                             <form class="row g-3" action="/createVehicle" method="POST">
                                 <div class="col-md-6">
-                                    <label for="inputMarca" class="form-label">Marca</label>
-                                    <input type="text" name="brand" class="form-control input-shadow form-ismat" placeholder="Marca" id="inputMarca">
+                                    {{vehicle_form.brand.label(class_='form-label')}}
+                                    {{vehicle_form.brand(class_='form-control input-shadow form-ismat', placeholder='Marca')}}
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="inputModelo" class="form-label">Modelo</label>
-                                    <input type="text" name="model" class="form-control input-shadow form-ismat" placeholder="Modelo" id="inputModelo">
+                                    {{vehicle_form.model.label(class_='form-label')}}
+                                    {{vehicle_form.model(class_='form-control input-shadow form-ismat', placeholder='Modelo')}}
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="inputCor" class="form-label">Cor</label>
-                                    <input type="text" name="color" class="form-control input-shadow form-ismat" placeholder="Cor" id="inputCor">
+                                    {{vehicle_form.color.label(class_='form-label')}}
+                                    {{vehicle_form.color(class_='form-control input-shadow form-ismat', placeholder='Cor')}}
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="inputMatricula" class="form-label">Matrícula</label>
-                                    <input type="text" name="licensePlate" class="form-control input-shadow form-ismat" placeholder="Matricula" id="inputMatricula">
+                                    {{vehicle_form.licensePlate.label(class_='form-label')}}
+                                    {{vehicle_form.licensePlate(class_='form-control input-shadow form-ismat', placeholder='Matrícula')}}
                                 </div>
                                 <div class="col-12 d-grid">
                                     <button type="submit" class="btn-ismat-large" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#editarVeiculos">Criar</button>
@@ -130,16 +130,16 @@
                     <div class="col d-flex flex-column justify-content-center">
                         <div class="row g-3">
                             <div class="col-6">
-                                <label for="floatingActualPassword">Password Atual</label>
-                                <input type="password" name="password" class="form-control input-shadow form-ismat" id="floatingActualPassword" placeholder="Password Atual">
+                                {{password_form.password.label}}
+                                {{password_form.password(class_='form-control input-shadow form-ismat', placeholder='Password Atual')}}
                             </div>
                             <div class="col-6">
-                                <label for="floatingPassword">Nova Password</label>
-                                <input type="password" name="newPassword" class="form-control input-shadow form-ismat" id="floatingPassword" placeholder="Nova Password">
+                                {{password_form.newPassword.label}}
+                                {{password_form.newPassword(class_='form-control input-shadow form-ismat', placeholder='Nova Password')}}
                             </div>
                             <div class="col-6">
-                                <label for="floatingConfirmPassword">Confirmar Nova Password</label>
-                                <input type="password" name="passwordConfirmation" class="form-control input-shadow form-ismat" id="floatingConfirmPassword" placeholder="Confirmar Nova Password">
+                                {{password_form.passwordConfirmation.label}}
+                                {{password_form.passwordConfirmation(class_='form-control input-shadow form-ismat', placeholder='Confirmar Nova Password')}}
                             </div>
                         </div>
                     </div>

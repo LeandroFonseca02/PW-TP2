@@ -10,6 +10,7 @@ from controllers.vehicles import vehicles
 from controllers.users import users
 from controllers.auth import auth, login_manager
 from controllers.db import db
+from forms import SearchRideForm, CreateRideForm
 from models.profile import Profile
 from models.ride import Ride
 from models.vehicle import Vehicle
@@ -38,10 +39,12 @@ with app.app_context():
 @app.route('/', methods=['POST', 'GET'])
 @login_required
 def index():
+    create_form = CreateRideForm(destination='ISMAT')
+    search_form = SearchRideForm(inputDestino='ISMAT')
     rides = Ride.get_index_rides(current_user.id)
     profile = Profile.get_profile(current_user.id)
     vehicles = Vehicle.get_vehicles_by_userid(current_user.id)
-    return render_template('index.html', profile=profile, title='Boleias ISMAT', rides=rides, vehicles=vehicles)
+    return render_template('index.html', profile=profile, title='Boleias ISMAT', rides=rides, vehicles=vehicles, search_form=search_form, create_form=create_form)
 
 
 app.register_blueprint(auth)

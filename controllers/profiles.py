@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 
 from config.config import UPLOAD_FOLDER
+from forms import UpdateProfileDataForm, CreateVehicleForm, UpdatePasswordForm
 from models.profile import Profile
 from models.ride import Ride
 from models.user import User
@@ -15,7 +16,10 @@ profiles = Blueprint('profiles', __name__, template_folder='templates')
 @login_required
 def profile():
     profile = Profile.get_profile(current_user.id)
-    return render_template('perfil.html', email=current_user.email, profile=profile)
+    profile_data_form = UpdateProfileDataForm(email=current_user.email, firstname=profile.first_name, lastname=profile.last_name, phone=profile.phone_number)
+    vehicle_form = CreateVehicleForm()
+    password_form = UpdatePasswordForm()
+    return render_template('perfil.html', profile=profile, data_form= profile_data_form, vehicle_form=vehicle_form, password_form=password_form)
 
 @profiles.route('/uploadImage', methods=['POST'])
 @login_required

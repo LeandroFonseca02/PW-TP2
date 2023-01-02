@@ -170,6 +170,11 @@ body{
     top:0%;
 }
 
+.description-input{
+    height: 180px;
+    resize: none;
+}
+
 .rating-wrapper {
     align-self: center;
     display: inline-flex;
