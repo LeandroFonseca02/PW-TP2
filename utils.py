@@ -1,7 +1,7 @@
 from flask import url_for
 from flask_mail import Message, Mail
 
-from models.ride import Ride
+from models.rating import Rating
 
 mail = Mail()
 
@@ -21,18 +21,16 @@ def sendRecoverPasswordEmail(user):
     mail.send(msg)
 
 
-def sendRatingEmail(ride_id):
-    passengers = Ride.get_ride_passengers(ride_id)
-    ride = Ride.get_ride_by_id(ride_id)
+def sendRatingEmail(ride, passengers):
     for passenger in passengers:
-        token = 'a'
+        token = Rating.get_rating_token(passenger.user_id, ride.id)
         msg = Message(
             'Avalie a sua boleia - Boleias ISMAT',
             sender='boleiasismat@gmail.com',
             recipients=[passenger.email]
         )
         msg.body = f'''Para avaliar a boleia {ride.origin.upper()} - {ride.destination.upper()} no dia {ride.ride_date} às {ride.ride_hour}, entre no seguinte link:
-        {url_for('ratings.send_rating_token', token=token, _external=True)}
+        {url_for('ratings.rating_token', token=token, _external=True)}
 
         Se não foi você que participou nesta boleia ignore este email.
         '''

@@ -1,17 +1,12 @@
 {% extends 'base.html' %}
 {% block body %}
-<button type="button" class="btn-ismat-large" data-bs-toggle="modal" data-bs-target="#staticBackdrop4">
-  Avaliar
-</button>
 
-<div class="modal fade" id="staticBackdrop4" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel4" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel4">Avaliação</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="container" style="width: 50%">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title" id="staticBackdropLabel4">Avaliação</h5>
       </div>
-      <div class="modal-body">
+      <div class="card-body">
         <form action="/sendRatings/{{ride_id}}" method="POST">
           <table class="text-nowrap w-auto">
             <tbody id="ratings">
@@ -22,7 +17,7 @@
                             <img class="ms-4 p-2 card-profile-image rounded-circle" src="{{passenger.photo}}"
                                  alt="Profile Image">
                         </td>
-                        <td class="ps-3">{{passenger.first_name}}</td>
+                        <td class="ps-3">{{passenger.first_name}} {{passenger.last_name}}</td>
                         <td>
                             <div class="rating-wrapper">
                                 <input type="radio" value="5" name="{{passenger.user_id}}" id="{{passenger.user_id}}-5">
@@ -49,5 +44,5 @@
       </div>
     </div>
   </div>
-</div>
+
 {% endblock %}

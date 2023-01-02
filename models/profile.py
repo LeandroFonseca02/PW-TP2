@@ -23,7 +23,7 @@ class Profile(db.Model):
     registration_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     photo = db.Column(db.Text, default='../static/images/icons/profile-icon.svg')
     phone_number = db.Column(db.String(30), unique=True)
-    classification = db.Column(db.Float(), db.CheckConstraint('classification >= 1 AND classification <= 5'),
+    classification = db.Column(db.Float(), db.CheckConstraint('classification >= 0 AND classification <= 5'),
                                default=0)
 
     def __str__(self):

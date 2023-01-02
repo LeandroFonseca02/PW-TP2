@@ -69,7 +69,6 @@ class User(db.Model, UserMixin):
     def get_reset_token(self, expire_sec=1800):
         payload = {
             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=expire_sec),
-            'iat': datetime.datetime.utcnow(),
             'user_id': self.id
         }
         encoded_jwt = jwt.encode(

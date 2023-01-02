@@ -1,7 +1,6 @@
 from flask import Blueprint, redirect, render_template, request
 from flask_login import current_user, login_required
 
-from forms import RatingForm
 from models.profile import Profile
 from models.rating import Rating
 from models.ride import Ride
@@ -13,30 +12,22 @@ def send_rating_email():
     return ""
 
 
-@ratings.route('/send_rating_token', methods=['GET', 'POST'])
+@ratings.route('/rating/<token>', methods=['GET', 'POST'])
 @login_required
-def send_rating_token():
-    form = RatingForm()
-    ride_id = '1'
+def rating_token(token):
+    data = Rating.verify_rating_token(token)
+    if data is None:
+        return 'Token inválido ou expirado'
+
+    ride_id = data.get('ride_id')
     passengers = Ride.get_ride_passengers(ride_id)
 
-    # user_id = User.verify_reset_token(token)
-    # if user_id is None:
-    #     print('Token inválido ou expirado')
-    #     return redirect('/reset_password')
-    # form = ResetPasswordForm()
-    #
-    # if form.is_submitted():
-    #     password = form.password.data
-    #     confirm_password = form.confirm_password.data
-    #     if password != confirm_password:
-    #         return "Passwords diferentes"
-    #     else:
-    #         User.update_password(user_id, generate_password_hash(password, method='sha256'))
-    #         return redirect('/login')
-
-    profile = Profile.get_profile(current_user.id)
-    return render_template('modal-rating.html', form=form, passengers=passengers, user_id=current_user.id, profile=profile, ride_id=ride_id)
+    if Rating.check_ratings_exist(current_user.id, ride_id):
+        return "Você já avaliou esta boleia!"
+    else:
+        profile = Profile.get_profile(current_user.id)
+        return render_template('rating.html', passengers=passengers, user_id=current_user.id, profile=profile,
+                               ride_id=ride_id)
 
 
 

@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 from controllers.db import db
 from models.reservation import Reservation
+from utils import sendRatingEmail
 
 
 @dataclass
@@ -81,7 +82,7 @@ class Ride(db.Model):
              JOIN reservation r ON u.id = r.user_id
              JOIN ride r2 ON r2.id = r.ride_id
         WHERE r.status != 'Cancelada' AND r2.id =
-        """ + ride_id
+        """ + str(ride_id)
 
         return db.session.execute(query).all()
 
@@ -167,6 +168,7 @@ class Ride(db.Model):
         for reservation in reservations:
             reservation.status = 'Confirmada'
         db.session.commit()
+        sendRatingEmail(Ride.get_ride_by_id(ride_id), Ride.get_ride_passengers(ride_id))
 
     @staticmethod
     def cancel_ride(ride_id):
