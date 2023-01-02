@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 
 from models.profile import Profile
 from models.reservation import Reservation
+from models.ride import Ride
 
 reservations = Blueprint('reservations', __name__, template_folder='templates')
 
@@ -20,8 +21,15 @@ def minhasReservas():
     historicos = Reservation.get_historic_reservations(current_user.id)
     return render_template('minhasReservas.html', profile=profile, reservas=reservas, historicos=historicos)
 
-@login_required
 @reservations.route('/cancel/reservation/<ride_id>', methods=['POST'])
+@login_required
 def cancelReservation(ride_id):
     Reservation.cancel_reservation(ride_id, current_user.id)
     return redirect('/minhasReservas')
+
+@reservations.route('/getReservationCancelationModal/<ride_id>', methods=['GET'])
+@login_required
+def getReservationCancelationModal(ride_id):
+    reservation = Reservation.get_reservation_by_user_id_and_ride_id(current_user.id, ride_id)
+    ride = Ride.get_ride_by_id(ride_id)
+    return render_template('reservationCancelationModal.html', reservation=reservation, ride=ride)

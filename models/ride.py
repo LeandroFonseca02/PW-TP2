@@ -45,7 +45,7 @@ class Ride(db.Model):
                         rs.user_id,
                         to_char(r.ride_date, 'MM') AS ride_date_month,
                         to_char(r.ride_date, 'DD') AS ride_date_day,
-                        to_char(r.ride_hour, 'HH') AS ride_hours,
+                        to_char(r.ride_hour, 'HH24') AS ride_hours,
                         to_char(r.ride_hour, 'MI') AS ride_minutes,
                         r.number_of_available_seats,
                         r.status,
@@ -102,7 +102,7 @@ class Ride(db.Model):
                r.user_id,
                to_char(r.ride_date, 'MM') AS ride_date_month,
                to_char(r.ride_date, 'DD') AS ride_date_day,
-               to_char(r.ride_hour, 'HH') AS ride_hours,
+               to_char(r.ride_hour, 'HH24') AS ride_hours,
                to_char(r.ride_hour, 'MI') AS ride_minutes,
                r.number_of_available_seats,
                r.status,
@@ -121,7 +121,7 @@ class Ride(db.Model):
                r.user_id,
                to_char(r.ride_date, 'MM') AS ride_date_month,
                to_char(r.ride_date, 'DD') AS ride_date_day,
-               to_char(r.ride_hour, 'HH') AS ride_hours,
+               to_char(r.ride_hour, 'HH24') AS ride_hours,
                to_char(r.ride_hour, 'MI') AS ride_minutes,
                r.number_of_available_seats,
                r.status,
@@ -132,15 +132,46 @@ class Ride(db.Model):
               AND r.user_id =""" + str(user_id)
         return db.session.execute(query).all()
 
+    @staticmethod
+    def get_filtered_rides(user_id,  filters):
+        query = """ 
+                SELECT DISTINCT r.id,
+                                rs.user_id,
+                                to_char(r.ride_date, 'MM') AS ride_date_month,
+                                to_char(r.ride_date, 'DD') AS ride_date_day,
+                                to_char(r.ride_hour, 'HH24') AS ride_hours,
+                                to_char(r.ride_hour, 'MI') AS ride_minutes,
+                                r.number_of_available_seats,
+                                r.status,
+                                r.origin,
+                                r.destination,
+                                rs.is_driver
+                FROM ride AS r,reservation rs
+                WHERE r.status = 'Aberta'
+                  AND rs.ride_id = r.id
+                  AND rs.is_driver = TRUE
+                  AND r.id NOT IN (
+                        SELECT DISTINCT r.id
+                        FROM ride AS r
+                            INNER JOIN reservation rs ON r.id = rs.ride_id
+                        WHERE rs.user_id =""" + str(user_id) + """)"""+filters
+        return db.session.execute(query).all()
 
-        # def __init__(self, user_id, vehicle_id, ride_date, number_of_available_seats, status, origin, destination,
-        #              created_at, updated_at):
-        #     self.user_id = user_id
-        #     self.vehicle_id = vehicle_id
-        #     self.ride_date = ride_date
-        #     self.number_of_available_seats = number_of_available_seats
-        #     self.status = status
-        #     self.origin = origin
-        #     self.destination = destination
-        #     self.created_at = created_at
-        #     self.updated_at = updated_at
+
+    @staticmethod
+    def confirm_ride(ride_id):
+        ride = Ride.get_ride_by_id(int(ride_id))
+        ride.status = 'Confirmada'
+        db.session.commit()
+
+    @staticmethod
+    def cancel_ride(ride_id):
+        ride = Ride.get_ride_by_id(int(ride_id))
+        ride.status = 'Cancelada'
+        db.session.commit()
+
+    @staticmethod
+    def finalize_ride(ride_id):
+        ride = Ride.get_ride_by_id(int(ride_id))
+        ride.status = 'Concluida'
+        db.session.commit()

@@ -1,0 +1,18 @@
+{% extends 'baseModal.html' %}
+
+{% block id %}finalizeRide{% endblock %}
+
+{% block title %}Finalizar Boleia{% endblock %}
+
+{% block body %}
+<div class="modal-body">
+    <p>Tem a certeza que quer finalizar a boleia {{ride.origin|upper}}-{{ride.destination|upper}}?</p>
+</div>
+{% endblock %}
+
+{% block footer %}
+      <div class="modal-footer">
+        <a name="{{ride.id}}" href="/" class="btn btn-success" data-bs-dismiss="modal" onclick="finalizeRide(this.name)">Sim</a>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Não</button>
+      </div>
+{% endblock %}

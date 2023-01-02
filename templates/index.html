@@ -103,7 +103,7 @@
                             </div>
                         </div>
                     </div>
-                    <form class="row g-3">
+                    <form class="row g-3" action="/searchRide" method="POST">
                         <div class="col-6">
                             <label for="inputPesquisarOrigem" class="form-label">Origem</label>
                             <input type="text" class="form-control input-shadow form-ismat inputOrigem" name="inputOrigem"
@@ -125,7 +125,7 @@
                                    placeholder="00:00" id="inputPesquisarHora">
                         </div>
                         <div class="col-12 d-grid mt-4">
-                            <button type="button" class="btn-ismat-large">Pesquisar</button>
+                            <button type="submit" class="btn-ismat-large">Pesquisar</button>
                         </div>
                     </form>
                 </div>
@@ -214,6 +214,7 @@
     </div>
 
 </div>
+<div id="modalWrapper"></div>
 <script src="../static/js/destinationButton.js"></script>
 <script src="../static/js/showMoreButton.js"></script>
 {% endblock %}

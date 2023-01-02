@@ -37,21 +37,112 @@ function getUserModal(user_id){
     });
 }
 
+function confirmRide(ride_id){
+    fetch('/confirmRide/'+ride_id, {
+        method:"POST",
+    }).then(response =>{
+        document.location.reload()
+    })
+}
+
+function getRideConfirmationModal(ride_id) {
+    modalWrapper = document.getElementById("modalWrapper")
+    fetch('/getRideConfirmationModal/'+ride_id, {
+        method: "GET"
+    }).then(response => {
+        console.log(ride_id)
+        return response.text();
+    }).then(html => {
+        modalWrapper.innerHTML = html;
+        $("#confirmation"+ride_id).modal("toggle");
+
+    });
+}
+
+function finalizeRide(ride_id){
+    fetch('/finalizeRide/'+ride_id, {
+        method:"POST",
+    }).then(response =>{
+        document.location.reload()
+    })
+}
+
+function getRideFinalizeModal(ride_id) {
+    modalWrapper = document.getElementById("modalWrapper")
+    fetch('/getRideFinalizeModal/'+ride_id, {
+        method: "GET"
+    }).then(response => {
+        return response.text();
+    }).then(html => {
+        modalWrapper.innerHTML = html;
+        $("#finalizeRide"+ride_id).modal("toggle");
+
+    });
+}
+
+function cancelRide(ride_id){
+    fetch('/cancelRide/'+ride_id, {
+        method:"POST",
+    }).then(response =>{
+        document.location.reload()
+    })
+}
+
+function getRideCancelationModal(ride_id) {
+    modalWrapper = document.getElementById("modalWrapper")
+    fetch('/getRideCancelationModal/'+ride_id, {
+        method: "GET"
+    }).then(response => {
+        return response.text();
+    }).then(html => {
+        modalWrapper.innerHTML = html;
+        $("#cancelRide"+ride_id).modal("toggle");
+
+    });
+}
+
 function reservation(ride_id){
     fetch('/reservation/'+ride_id, {
         method:"POST",
-        headers:{'Content-Type': 'application/json'},
-        body:JSON.stringify({ride_id:ride_id})
+    }).then(response =>{
+        document.location.reload()
     })
+}
+
+function getRideReservationModal(ride_id) {
+    modalWrapper = document.getElementById("modalWrapper")
+    fetch('/getRideReservationModal/'+ride_id, {
+        method: "GET"
+    }).then(response => {
+        return response.text();
+    }).then(html => {
+        modalWrapper.innerHTML = html;
+        $("#reserveRide"+ride_id).modal("toggle");
+
+    });
 }
 
 function cancelReservation(ride_id){
     fetch('/cancel/reservation/'+ride_id, {
-        method:"POST",
-        headers:{'Content-Type': 'application/json'},
-        body:JSON.stringify({ride_id:ride_id})
+        method:"POST"
+    }).then(response =>{
+        document.location.reload()
     })
 }
+
+function getReservationCancelationModal(ride_id) {
+    modalWrapper = document.getElementById("modalWrapper")
+    fetch('/getReservationCancelationModal/'+ride_id, {
+        method: "GET"
+    }).then(response => {
+        return response.text();
+    }).then(html => {
+        modalWrapper.innerHTML = html;
+        $("#cancelReservation"+ride_id).modal("toggle");
+
+    });
+}
+
 
 
 function createStar(div,score){

@@ -31,6 +31,10 @@ class Reservation(db.Model):
         db.session.commit()
 
     @staticmethod
+    def get_reservation_by_user_id_and_ride_id(user_id, ride_id):
+        return db.session.query(Reservation).filter(Reservation.user_id == user_id, Reservation.ride_id == ride_id).first()
+
+    @staticmethod
     def get_active_reservations(user_id):
         query = """
             SELECT r.id,

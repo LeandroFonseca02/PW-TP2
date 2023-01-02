@@ -55,66 +55,21 @@
 <div class="d-flex flex-row-reverse">
     <div class="me-4">
         {% if card_type == 'boleia' %}
-        {% if ride.status ==  'Concluida' %}
-        <button type="button" class="btn-ismat-large" data-bs-toggle="modal"
-                data-bs-target="#reservation{{ride.id}}">Confirmar
-        </button>
-        <button type="button" class="btn-ismat-large" data-bs-toggle="modal"
-                data-bs-target="#reservation{{ride.id}}">Cancelar
-        </button>
-        {% else %}
-        <button type="button" class="btn-ismat-large" data-bs-toggle="modal"
-                data-bs-target="#reservation{{ride.id}}">Finalizar
-        </button>
-        {% endif %}
+            {% if ride.status ==  'Aberta' %}
+            <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideConfirmationModal(this.name)">Confirmar
+            </button>
+            <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideCancelationModal(this.name)">Cancelar
+            </button>
+            {% else %}
+            <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideFinalizeModal(this.name)">Finalizar
+            </button>
+            {% endif %}
         {% elif card_type == 'reserva' %}
-        <button type="button" class="btn-ismat-large" data-bs-toggle="modal"
-                data-bs-target="#cancel{{ride.id}}">Cancelar
+        <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getReservationCancelationModal(this.name)">Cancelar
         </button>
-        <div class="modal fade" id="cancel{{ride.id}}"
-             data-bs-keyboard="false" tabindex="-1"
-             aria-labelledby=""
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Cancelar Reserva</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Tem a certeza que quer cancelar a reserva {{ride.origin|upper}}-{{ride.destination|upper}}?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" name="{{ride.id}}" class="btn btn-success" data-bs-dismiss="modal" onclick="cancelReservation(this.name)">Sim</button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Não</button>
-                    </div>
-                </div>
-            </div>
-        </div>
         {% elif card_type == 'generico' %}
-        <button type="button" class="btn-ismat-large" data-bs-toggle="modal"
-                data-bs-target="#reservation{{ride.id}}">Reservar
+        <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideReservationModal(this.name)"">Reservar
         </button>
-        <div class="modal fade" id="reservation{{ride.id}}"
-             data-bs-keyboard="false" tabindex="-1"
-             aria-labelledby=""
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="a">Reservar Boleia</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Tem a certeza que quer reservar a boleia {{ride.origin|upper}}-{{ride.destination|upper}}?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" name="{{ride.id}}" class="btn btn-success" data-bs-dismiss="modal" onclick="reservation(this.name)">Sim</button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Não</button>
-                    </div>
-                </div>
-            </div>
-        </div>
         {% else %}
         {% endif %}
     </div>
