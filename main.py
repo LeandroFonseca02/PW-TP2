@@ -4,6 +4,7 @@ from flask import Flask, render_template
 from flask_login import login_required, current_user
 
 from controllers.profiles import profiles
+from controllers.ratings import ratings
 from controllers.reservations import reservations
 from controllers.rides import rides
 from controllers.vehicles import vehicles
@@ -57,6 +58,7 @@ app.register_blueprint(profiles)
 app.register_blueprint(vehicles)
 app.register_blueprint(rides)
 app.register_blueprint(reservations)
+app.register_blueprint(ratings)
 
 if __name__ == '__main__':
     app.run(debug=True)

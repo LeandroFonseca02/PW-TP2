@@ -20,3 +20,9 @@ class Rating(db.Model):
     rating = db.Column(db.Integer)
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
+
+
+    @staticmethod
+    def add_rating(ride_id, user_id, passenger_id, rating):
+        db.session.add(Rating(user_id=user_id, ride_id=ride_id, passenger_id=passenger_id, rating=rating))
+        db.session.commit()

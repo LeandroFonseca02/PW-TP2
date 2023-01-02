@@ -500,7 +500,7 @@ function generateRatings(data,parentDiv) {
               </td>
               <td class="ps-3">${data[i].firstName}</td>
               <td>
-                <div id="${"rating"+i}">
+                <div id="rating{{passenger.user_id}}">
                 </div>
               </td>
               <div id="${"ratingProfileModal"+i}"></div>
