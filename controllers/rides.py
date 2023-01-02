@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 
 from models.profile import Profile
 from models.ride import Ride
+from models.user import User
 from models.vehicle import Vehicle
 
 rides = Blueprint('rides', __name__, template_folder='templates')
@@ -106,3 +107,10 @@ def getRideCancelationModal(ride_id):
 def getRideReservationModal(ride_id):
     ride = Ride.get_ride_by_id(ride_id)
     return render_template('rideReservationModal.html', ride=ride)
+
+@rides.route('/getRemovePassengerModal/<ride_id>/<passenger_id>', methods=['GET'])
+@login_required
+def getRemovePassengerModal(ride_id, passenger_id):
+    ride = Ride.get_ride_by_id(ride_id)
+    passenger = User.get_user_by_id(passenger_id)
+    return render_template('passengerRemovalModal.html', ride=ride, passenger=passenger)

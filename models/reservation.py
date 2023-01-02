@@ -85,6 +85,11 @@ class Reservation(db.Model):
         reservation.status = 'Cancelada'
         db.session.commit()
 
+    @staticmethod
+    def remove_passenger(ride_id, passenger_id):
+        reservation = Reservation.get_reservation_by_user_id_and_ride_id(ride_id, passenger_id)
+        reservation.status = 'Cancelada'
+        db.session.commit()
 
     # def __init__(self, user_id, ride_id, created_at, updated_at):
     #     self.user_id = user_id

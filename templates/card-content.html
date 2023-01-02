@@ -20,7 +20,13 @@
                         </div>
                     </td>
                     <td>
-                        <div id="cardContentRemove{{ ride.id }}{{ passenger.user_id }}"></div>
+                        <div id="cardContentRemove{{ ride.id }}{{ passenger.user_id }}">
+                            {% if card_type == 'boleia' and ride.status == 'Aberta' and passenger.is_driver == False%}
+                            <button type="button" class="btn-ismat-close ms-3" name="{{ride.id}} {{passenger.user_id}}" onclick="getRemovePassengerModal(this.name)">
+                                <i class="fas fa-times-circle" style="font-size: 24px"></i>
+                            </button>
+                            {% endif %}
+                        </div>
                     </td>
                 </tr>
 
@@ -55,15 +61,15 @@
 <div class="d-flex flex-row-reverse">
     <div class="me-4">
         {% if card_type == 'boleia' %}
-            {% if ride.status ==  'Aberta' %}
-            <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideConfirmationModal(this.name)">Confirmar
-            </button>
-            <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideCancelationModal(this.name)">Cancelar
-            </button>
-            {% else %}
-            <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideFinalizeModal(this.name)">Finalizar
-            </button>
-            {% endif %}
+        {% if ride.status ==  'Aberta' %}
+        <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideConfirmationModal(this.name)">Confirmar
+        </button>
+        <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideCancelationModal(this.name)">Cancelar
+        </button>
+        {% else %}
+        <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideFinalizeModal(this.name)">Finalizar
+        </button>
+        {% endif %}
         {% elif card_type == 'reserva' %}
         <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getReservationCancelationModal(this.name)">Cancelar
         </button>

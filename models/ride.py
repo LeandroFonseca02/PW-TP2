@@ -74,7 +74,8 @@ class Ride(db.Model):
         last_name,
         photo,
         phone_number,
-        classification
+        classification,
+        is_driver
         FROM "user" AS u
              JOIN profile p ON u.id = p.user_id
              JOIN reservation r ON u.id = r.user_id

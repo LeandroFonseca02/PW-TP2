@@ -33,3 +33,9 @@ def getReservationCancelationModal(ride_id):
     reservation = Reservation.get_reservation_by_user_id_and_ride_id(current_user.id, ride_id)
     ride = Ride.get_ride_by_id(ride_id)
     return render_template('reservationCancelationModal.html', reservation=reservation, ride=ride)
+
+@reservations.route('/removePassenger/<ride_id>/<passenger_id>', methods=['PATCH'])
+@login_required
+def removePassenger(ride_id, passenger_id):
+    Reservation.remove_passenger(passenger_id, ride_id)
+    return redirect('/minhasBoleias')

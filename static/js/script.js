@@ -143,7 +143,28 @@ function getReservationCancelationModal(ride_id) {
     });
 }
 
+function removePassenger(ids){
+    ids=ids.split(' ')
+    fetch('/removePassenger/'+ids[0]+'/'+ids[1], {
+        method:"PATCH"
+    }).then(response =>{
+        document.location.reload()
+    })
+}
 
+function getRemovePassengerModal(ids) {
+    ids=ids.split(' ')
+    modalWrapper = document.getElementById("modalWrapper")
+    fetch('/getRemovePassengerModal/'+ids[0]+'/'+ids[1], {
+        method: "GET"
+    }).then(response => {
+        return response.text();
+    }).then(html => {
+        modalWrapper.innerHTML = html;
+        $("#removePassenger"+ids[0]+ids[1]).modal("toggle");
+
+    });
+}
 
 function createStar(div,score){
     let star;
