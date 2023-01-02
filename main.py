@@ -1,9 +1,9 @@
+import json
+
 from flask import Flask, render_template
 from flask_login import login_required, current_user
 
-from config.config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS, SECRET_KEY, MAIL_SERVER, MAIL_PORT, \
-    MAIL_USERNAME, MAIL_PASSWORD, MAIL_USE_TLS, MAIL_USE_SSL
-from controllers.profiles import UPLOAD_FOLDER, profiles
+from controllers.profiles import profiles
 from controllers.reservations import reservations
 from controllers.rides import rides
 from controllers.vehicles import vehicles
@@ -17,17 +17,21 @@ from models.vehicle import Vehicle
 from utils import mail
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['SECRET_KEY'] = SECRET_KEY
 
-app.config['MAIL_SERVER'] = MAIL_SERVER
-app.config['MAIL_PORT'] = MAIL_PORT
-app.config['MAIL_USERNAME'] = MAIL_USERNAME
-app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
-app.config['MAIL_USE_TLS'] = MAIL_USE_TLS
-app.config['MAIL_USE_SSL'] = MAIL_USE_SSL
+with open('./config/config.json') as file:
+    data = json.load(file)
+
+
+app.config['SQLALCHEMY_DATABASE_URI'] = data['database']['SQLALCHEMY_DATABASE_URI']
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = data['database']['SQLALCHEMY_TRACK_MODIFICATIONS']
+app.config['UPLOAD_FOLDER'] = data['UPLOAD_FOLDER']
+app.config['SECRET_KEY'] = data['SECRET_KEY']
+app.config['MAIL_SERVER'] = data['mail']['MAIL_SERVER']
+app.config['MAIL_PORT'] = data['mail']['MAIL_PORT']
+app.config['MAIL_USERNAME'] = data['mail']['MAIL_USERNAME']
+app.config['MAIL_PASSWORD'] = data['mail']['MAIL_PASSWORD']
+app.config['MAIL_USE_TLS'] = data['mail']['MAIL_USE_TLS']
+app.config['MAIL_USE_SSL'] = data['mail']['MAIL_USE_SSL']
 mail.init_app(app)
 
 login_manager.init_app(app)

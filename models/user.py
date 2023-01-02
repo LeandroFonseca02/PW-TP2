@@ -1,11 +1,15 @@
 import datetime
+import json
 from dataclasses import dataclass
 import jwt
 from flask_security import UserMixin
-
-from config.config import SECRET_KEY
 from controllers.db import db
 from models.role import roles_users_table, Role
+
+with open('./config/config.json') as file:
+    data = json.load(file)
+
+SECRET_KEY = data['SECRET_KEY']
 
 
 @dataclass
@@ -16,6 +20,7 @@ class User(db.Model, UserMixin):
     active: bool
     roles: str
 
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.Unicode(255))
@@ -38,7 +43,6 @@ class User(db.Model, UserMixin):
         user.email = email
         db.session.commit()
 
-
     @staticmethod
     def update_password(id, password):
         user = User.get_user_by_id(id)
@@ -46,7 +50,7 @@ class User(db.Model, UserMixin):
         db.session.commit()
 
     @staticmethod
-    def create_user(email,password):
+    def create_user(email, password):
         user = User(email=email, password=password)
         db.session.add(user)
         db.session.commit()
@@ -69,9 +73,9 @@ class User(db.Model, UserMixin):
             'user_id': self.id
         }
         encoded_jwt = jwt.encode(
-                payload,
-                str(SECRET_KEY),
-                algorithm='HS256'
+            payload,
+            str(SECRET_KEY),
+            algorithm='HS256'
         )
 
         return encoded_jwt

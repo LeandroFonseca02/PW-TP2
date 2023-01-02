@@ -17,3 +17,8 @@ def sendRecoverPasswordEmail(user):
     Se não foi você que fez o pedido de recuperação ignore este email.
     '''
     mail.send(msg)
+
+
+# def sendRatingEmail(ride, passengers):
+    # for passenger in passengers:
+        # token =

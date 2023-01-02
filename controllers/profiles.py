@@ -1,13 +1,17 @@
+import json
 import os
 from flask import Blueprint, request, redirect, render_template, jsonify
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
-
-from config.config import UPLOAD_FOLDER
 from forms import UpdateProfileDataForm, CreateVehicleForm, UpdatePasswordForm
 from models.profile import Profile
 from models.ride import Ride
 from models.user import User
+
+with open('./config/config.json') as file:
+    data = json.load(file)
+
+UPLOAD_FOLDER = data['UPLOAD_FOLDER']
 
 
 profiles = Blueprint('profiles', __name__, template_folder='templates')
