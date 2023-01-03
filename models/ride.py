@@ -52,11 +52,13 @@ class Ride(db.Model):
                         r.status,
                         r.origin,
                         r.destination,
-                        rs.is_driver
+                        rs.is_driver,
+                        r.number_of_available_seats
         FROM ride AS r,reservation rs
         WHERE r.status = 'Aberta'
           AND rs.ride_id = r.id
           AND rs.is_driver = TRUE
+          AND r.number_of_available_seats > 0
           AND r.id NOT IN (
                 SELECT DISTINCT r.id
                 FROM ride AS r
