@@ -6,10 +6,10 @@ from flask_security import UserMixin
 from controllers.db import db
 from models.role import roles_users_table, Role
 
-with open('./config/config.json') as file:
-    data = json.load(file)
-
-SECRET_KEY = data['SECRET_KEY']
+# with open('./config/config.json') as file:
+#     data = json.load(file)
+#
+# SECRET_KEY = data['SECRET_KEY']
 
 
 @dataclass
@@ -67,6 +67,10 @@ class User(db.Model, UserMixin):
         return self.email
 
     def get_reset_token(self, expire_sec=1800):
+        with open('./config/config.json') as file:
+            data = json.load(file)
+
+        SECRET_KEY = data['SECRET_KEY']
         payload = {
             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=expire_sec),
             'user_id': self.id
@@ -82,6 +86,10 @@ class User(db.Model, UserMixin):
     @staticmethod
     def verify_reset_token(token):
         try:
+            with open('./config/config.json') as file:
+                data = json.load(file)
+
+            SECRET_KEY = data['SECRET_KEY']
             data = jwt.decode(
                 token,
                 str(SECRET_KEY),

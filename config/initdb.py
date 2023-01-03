@@ -9,9 +9,6 @@ from models.ride import Ride
 from models.reservation import Reservation
 from models.rating import Rating
 
-# MUDAR CAMINHO DO CONFIG.JSON NOS FICHEIROS models.user E models.rating
-# PARA ../config/config.json
-# APOS CORRER O initdb VOLTAR A COLOCAR PARA ./config/config.json
 
 app = flask.Flask(__name__)
 with open('config.json') as file:

@@ -7,10 +7,10 @@ import jwt
 from controllers.db import db
 from models.profile import Profile
 
-with open('./config/config.json') as file:
-    data = json.load(file)
-
-SECRET_KEY = data['SECRET_KEY']
+# with open('./config/config.json') as file:
+#     data = json.load(file)
+#
+# SECRET_KEY = data['SECRET_KEY']
 
 @dataclass
 class Rating(db.Model):
@@ -47,6 +47,10 @@ class Rating(db.Model):
 
     @staticmethod
     def get_rating_token(user_id, ride_id):
+        with open('./config/config.json') as file:
+            data = json.load(file)
+
+        SECRET_KEY = data['SECRET_KEY']
         payload = {
             'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24),
             'user_id': user_id,
@@ -62,6 +66,10 @@ class Rating(db.Model):
 
     @staticmethod
     def verify_rating_token(token):
+        with open('./config/config.json') as file:
+            data = json.load(file)
+
+        SECRET_KEY = data['SECRET_KEY']
         try:
             jwt_token = jwt.decode(
                 token,
