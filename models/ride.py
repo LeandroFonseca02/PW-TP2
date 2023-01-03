@@ -187,3 +187,15 @@ class Ride(db.Model):
         for reservation in reservations:
             reservation.status = 'Concluida'
         db.session.commit()
+
+    @staticmethod
+    def remove_available_seat(ride_id):
+        ride = Ride.get_ride_by_id(int(ride_id))
+        ride.number_of_available_seats += -1
+        db.session.commit()
+
+    @staticmethod
+    def add_available_seat(ride_id):
+        ride = Ride.get_ride_by_id(int(ride_id))
+        ride.number_of_available_seats += 1
+        db.session.commit()

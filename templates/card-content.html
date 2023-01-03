@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="mt-3 px-1 m-3">
-            <p>Lugares Disponíveis: {{ride.number_of_available_seats - passengers|length +1}}</p>
+            <p>Lugares Disponíveis: {{ride.number_of_available_seats}}</p>
         </div>
     </div>
 
@@ -74,7 +74,7 @@
         <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getReservationCancelationModal(this.name)">Cancelar
         </button>
         {% elif card_type == 'generico' %}
-        <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideReservationModal(this.name)"">Reservar
+        <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideReservationModal(this.name)">Reservar
         </button>
         {% else %}
         {% endif %}

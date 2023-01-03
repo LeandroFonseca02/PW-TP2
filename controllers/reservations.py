@@ -11,6 +11,7 @@ reservations = Blueprint('reservations', __name__, template_folder='templates')
 @login_required
 def reservation(ride_id):
     Reservation.create_reservation(Reservation(user_id=current_user.id, ride_id=int(ride_id)))
+    Ride.remove_available_seat(ride_id)
     return "reserva concluida"
 
 @reservations.route('/minhasReservas', methods=['GET'])
@@ -25,6 +26,7 @@ def minhasReservas():
 @login_required
 def cancelReservation(ride_id):
     Reservation.cancel_reservation(ride_id, current_user.id)
+    Ride.add_available_seat(ride_id)
     return redirect('/minhasReservas')
 
 @reservations.route('/getReservationCancelationModal/<ride_id>', methods=['GET'])
@@ -38,4 +40,5 @@ def getReservationCancelationModal(ride_id):
 @login_required
 def removePassenger(ride_id, passenger_id):
     Reservation.remove_passenger(passenger_id, ride_id)
+    Ride.add_available_seat(ride_id)
     return redirect('/minhasBoleias')
