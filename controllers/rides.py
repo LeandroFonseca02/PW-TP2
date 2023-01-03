@@ -2,6 +2,7 @@ import re
 from flask import Blueprint, request, redirect, render_template
 from flask_login import login_required, current_user
 
+from forms import CreateRideForm, SearchRideForm
 from models.profile import Profile
 from models.ride import Ride
 from models.user import User
@@ -47,6 +48,8 @@ def minhasBoleias():
 @rides.route('/searchRide', methods=['POST'])
 @login_required
 def searchRide():
+    create_form = CreateRideForm(destination='ISMAT')
+    search_form = SearchRideForm(inputDestino='ISMAT')
     filters=''
     form = request.form
     origin = form.get('inputOrigem')
@@ -62,7 +65,7 @@ def searchRide():
     if ride_hour != '':
         filters += " AND ride_hour = "+"'"+ride_hour+"'"
     filteredRides = Ride.get_filtered_rides(current_user.id, filters)
-    return render_template('index.html', rides=filteredRides, profile=Profile.get_profile(current_user.id))
+    return render_template('index.html', rides=filteredRides, profile=Profile.get_profile(current_user.id), search_form=search_form, create_form=create_form)
 
 @rides.route('/confirmRide/<ride_id>', methods=['POST'])
 @login_required
