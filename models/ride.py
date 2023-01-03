@@ -82,7 +82,7 @@ class Ride(db.Model):
              JOIN profile p ON u.id = p.user_id
              JOIN reservation r ON u.id = r.user_id
              JOIN ride r2 ON r2.id = r.ride_id
-        WHERE r.status != 'Cancelada' AND r2.id =
+        WHERE (r.status != 'Cancelada' OR is_driver = true) AND r2.id =
         """ + str(ride_id) + """ ORDER BY r.created_at ASC"""
 
         return db.session.execute(query).all()
