@@ -50,7 +50,6 @@ function getRideConfirmationModal(ride_id) {
     fetch('/getRideConfirmationModal/'+ride_id, {
         method: "GET"
     }).then(response => {
-        console.log(ride_id)
         return response.text();
     }).then(html => {
         modalWrapper.innerHTML = html;
