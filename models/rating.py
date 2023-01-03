@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import jwt
 
 from controllers.db import db
+from models.profile import Profile
 
 with open('./config/config.json') as file:
     data = json.load(file)
@@ -23,9 +24,9 @@ class Rating(db.Model):
 
     __tablename__ = 'rating'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
-    ride_id = db.Column(db.Integer)
-    passenger_id = db.Column(db.Integer)
+    user_id = db.Column('user_id', db.ForeignKey('user.id'))
+    ride_id = db.Column('ride_id', db.ForeignKey('ride.id'))
+    passenger_id = db.Column('passenger_id', db.ForeignKey('user.id'))
     rating = db.Column(db.Integer)
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
@@ -34,6 +35,13 @@ class Rating(db.Model):
     def add_rating(ride_id, user_id, passenger_id, rating):
         db.session.add(Rating(user_id=user_id, ride_id=ride_id, passenger_id=passenger_id, rating=rating,
                               created_at=datetime.datetime.utcnow()))
+        db.session.commit()
+        profile = Profile.get_profile(passenger_id)
+        query = """
+            SELECT AVG(rating) AS user_rating FROM rating
+                WHERE passenger_id =""" + str(passenger_id)
+        profile_rating = db.session.execute(query).first()
+        profile.classification = profile_rating.user_rating
         db.session.commit()
 
 
