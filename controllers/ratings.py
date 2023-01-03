@@ -7,10 +7,6 @@ from models.ride import Ride
 
 ratings = Blueprint('ratings', __name__, template_folder='templates')
 
-@ratings.route('/')
-def send_rating_email():
-    return ""
-
 
 @ratings.route('/rating/<token>', methods=['GET', 'POST'])
 @login_required
