@@ -6,10 +6,6 @@ from flask_security import UserMixin
 from controllers.db import db
 from models.role import roles_users_table, Role
 
-# with open('./config/config.json') as file:
-#     data = json.load(file)
-#
-# SECRET_KEY = data['SECRET_KEY']
 
 
 @dataclass

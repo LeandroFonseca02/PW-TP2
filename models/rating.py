@@ -7,10 +7,6 @@ import jwt
 from controllers.db import db
 from models.profile import Profile
 
-# with open('./config/config.json') as file:
-#     data = json.load(file)
-#
-# SECRET_KEY = data['SECRET_KEY']
 
 @dataclass
 class Rating(db.Model):
