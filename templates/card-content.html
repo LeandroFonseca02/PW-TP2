@@ -71,8 +71,10 @@
         </button>
         {% endif %}
         {% elif card_type == 'reserva' %}
+        {% if ride.status == 'Aberta'%}
         <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getReservationCancelationModal(this.name)">Cancelar
         </button>
+        {% endif %}
         {% elif card_type == 'generico' %}
         <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideReservationModal(this.name)">Reservar
         </button>
