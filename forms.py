@@ -26,8 +26,8 @@ class ResetPasswordForm(FlaskForm):
 
 
 class SearchRideForm(FlaskForm):
-    inputOrigem = StringField('Origem', validators=[InputRequired(), Length(min=1, max=50)])
-    inputDestino = StringField('Destino', validators=[InputRequired(), Length(min=1, max=50)])
+    inputOrigem = StringField('Origem', validators=[Optional(), Length(min=1, max=50)])
+    inputDestino = StringField('Destino', validators=[Optional(), Length(min=1, max=50)])
     inputData = DateField('Data', validators=[InputRequired()])
     inputHora = TimeField('Hora', validators=[InputRequired()])
 
