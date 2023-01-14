@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block profile_photo %}
+<img src=".{{profile.photo}}" alt="mdo" class="rounded-circle" width="32" height="32">
+{% endblock %}
 {% block body %}
 
 <div class="container" style="width: 50%">
@@ -14,7 +17,7 @@
                 {% if passenger.user_id != user_id %}
                     <tr>
                         <td>
-                            <img class="ms-4 p-2 card-profile-image rounded-circle" src="{{passenger.photo}}"
+                            <img class="ms-4 p-2 card-profile-image rounded-circle" src=".{{passenger.photo}}"
                                  alt="Profile Image">
                         </td>
                         <td class="ps-3">{{passenger.first_name}} {{passenger.last_name}}</td>
