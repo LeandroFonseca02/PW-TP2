@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block profile_photo %}
+<img src=".{{profile.photo}}" alt="mdo" class="rounded-circle" width="32" height="32">
+{% endblock %}
+{% block body %}
+
+<div class="container" style="width: 50%">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title" id="staticBackdropLabel4">Avaliação</h5>
+      </div>
+      <div class="card-body">
+        <form action="/sendRatings/{{ride_id}}" method="POST">
+          <table class="text-nowrap w-auto">
+            <tbody id="ratings">
+            {% for passenger in passengers %}
+                {% if passenger.user_id != user_id %}
+                    <tr>
+                        <td>
+                            <img class="ms-4 p-2 card-profile-image rounded-circle" src=".{{passenger.photo}}"
+                                 alt="Profile Image">
+                        </td>
+                        <td class="ps-3">{{passenger.first_name}} {{passenger.last_name}}</td>
+                        <td>
+                            <div class="rating-wrapper">
+                                <input type="radio" value="5" name="{{passenger.user_id}}" id="{{passenger.user_id}}-5">
+                                <label for="{{passenger.user_id}}-5"><i class="fas fa-star d-inline-block"></i></label>
+                                <input type="radio" value="4" name="{{passenger.user_id}}" id="{{passenger.user_id}}-4">
+                                <label for="{{passenger.user_id}}-4"><i class="fas fa-star d-inline-block"></i></label>
+                                <input type="radio" value="3" name="{{passenger.user_id}}" id="{{passenger.user_id}}-3">
+                                <label for="{{passenger.user_id}}-3"><i class="fas fa-star d-inline-block"></i></label>
+                                <input type="radio" value="2" name="{{passenger.user_id}}" id="{{passenger.user_id}}-2">
+                                <label for="{{passenger.user_id}}-2"><i class="fas fa-star d-inline-block"></i></label>
+                                <input type="radio" value="1" name="{{passenger.user_id}}" id="{{passenger.user_id}}-1">
+                                <label for="{{passenger.user_id}}-1"><i class="fas fa-star d-inline-block"></i></label>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+          <div class="me-4 mt-3 mb-2 d-flex flex-row-reverse">
+            <button type="submit" class="btn-ismat-large"> Avaliar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

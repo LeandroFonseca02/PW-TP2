@@ -1,0 +1,87 @@
+<div class="card-blocker"></div>
+<div class="row">
+    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="table-responsive text-nowrap">
+            <table class="text-nowrap w-auto">
+                <tbody>
+                {% for passenger in passengers %}
+                <tr id="Passenger{{ride.id}}{{ passenger.user_id }}" class="table-row">
+                    <td>
+                        <a href="#profileCard{{passenger.user_id}}" name="{{ passenger.user_id }}"
+                           onclick="getUserModal(this.name)">
+                            <img class="ms-4 p-2 me-2 rounded-circle card-profile-image"
+                                 src="{{ passenger.photo }}"
+                                 alt="Profile Image">
+                        </a>
+                    </td>
+                    <td class="ps-3">{{ passenger.first_name }}</td>
+                    <td>
+                        <div class="ms-3" id="cardContentAvaliacao{{ ride.id }}{{ passenger.user_id }}">
+                        </div>
+                    </td>
+                    <td>
+                        <div id="cardContentRemove{{ ride.id }}{{ passenger.user_id }}">
+                            {% if card_type == 'boleia' and ride.status == 'Aberta' and passenger.is_driver == False%}
+                            <button type="button" class="btn-ismat-close ms-3" name="{{ride.id}} {{passenger.user_id}}" onclick="getRemovePassengerModal(this.name)">
+                                <i class="fas fa-times-circle" style="font-size: 24px"></i>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card m-3">
+            <div class="card-header">
+                Descrição
+            </div>
+            <div class="card-body">
+                <p>Veículo:<br>
+                      Marca: {{vehicle.brand}}<br>
+                      Modelo: {{vehicle.model}}<br>
+                      Cor: {{vehicle.color}}<br>
+                      Matrícula: {{vehicle.license_plate}}<br>
+                    {{ride.description}}
+                </p>
+            </div>
+        </div>
+        <div class="mt-3 px-1 m-3">
+            <p>Lugares Disponíveis: {{ride.number_of_available_seats}}</p>
+        </div>
+    </div>
+
+</div>
+<div class="card-blocker"></div>
+<div class="d-flex flex-row-reverse">
+    <div class="me-4">
+        {% if card_type == 'boleia' %}
+        {% if ride.status ==  'Aberta' %}
+        <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideConfirmationModal(this.name)">Confirmar
+        </button>
+        <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideCancelationModal(this.name)">Cancelar
+        </button>
+        {% else %}
+        <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideFinalizeModal(this.name)">Finalizar
+        </button>
+        {% endif %}
+        {% elif card_type == 'reserva' %}
+        {% if ride.status == 'Aberta'%}
+        <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getReservationCancelationModal(this.name)">Cancelar
+        </button>
+        {% endif %}
+        {% elif card_type == 'generico' %}
+        <button type="button" class="btn-ismat-large" name="{{ride.id}}" onclick="getRideReservationModal(this.name)">Reservar
+        </button>
+        {% else %}
+        {% endif %}
+    </div>
+</div>
+<div class="card-blocker"></div>
+
+

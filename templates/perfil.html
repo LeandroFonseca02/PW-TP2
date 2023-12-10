@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block body %}
+<body>
+<div class="container" id="perfilContainer">
+    <div class="col d-flex flex-column mt-3">
+        <div class="row">
+            <div class="col-3">
+                <div class="col d-flex flex-column  align-items-center bg-light perfil-caixa justify-content-center h-100">
+                    <div class="d-flex mt-2">
+                        <h5 id="profileName">{{profile.first_name}} {{profile.last_name}}</h5>
+                    </div>
+                    <div class="col d-flex flex-column justify-content-center align-items-center justify-content-center">
+                        <div>
+                            <img src="{{profile.photo}}" alt="mdo" class="rounded-circle profile-image" id="profileImage">
+                        </div>
+                        <div>
+                            <form action="/uploadImage" method="POST" id="photoForm" enctype = "multipart/form-data">
+                                <label class="label-input-file" for="uploadProfilePic">Alterar Foto de Perfil</label>
+                                <input name="file" id = "uploadProfilePic" type = "file" accept="image/*" onchange="sendUploadImage()"/>
+                            </form>
+
+                        </div>
+                        <div class="mt-2" id="profileRating"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-9 d-flex flex-column bg-light perfil-caixa">
+                <div class="mt-2 mb-1">
+                    <h3>Dados Pessoais</h3>
+                </div>
+                <form action="/updateProfileData" method="POST" enctype = "multipart/form-data">
+                    <div class="col d-flex flex-column justify-content-center">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                {{data_form.email.label}}
+                                {{data_form.email(class_='form-control input-shadow form-ismat', placeholder='Email')}}
+                            </div>
+                            <div class="col-6">
+                                {{data_form.phone.label}}
+                                {{data_form.phone(class_='form-control input-shadow form-ismat', placeholder='Telemóvel')}}
+                            </div>
+                            <div class="col-6">
+                                {{data_form.firstname.label}}
+                                {{data_form.firstname(class_='form-control input-shadow form-ismat', placeholder='Nome')}}
+                            </div>
+                            <div class="col-6">
+                                {{data_form.lastname.label}}
+                                {{data_form.lastname(class_='form-control input-shadow form-ismat', placeholder='Apelido')}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3 mt-4 mb-3">
+                        <button type="submit" class="btn-ismat-large">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="modal fade" id="criarVeiculo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="criarVeiculoLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="criarVeiculoLabel">Criar Veículo</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-toggle="modal" data-bs-target="#editarVeiculos"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="row g-3" action="/createVehicle" method="POST">
+                                <div class="col-md-6">
+                                    {{vehicle_form.brand.label(class_='form-label')}}
+                                    {{vehicle_form.brand(class_='form-control input-shadow form-ismat', placeholder='Marca')}}
+                                </div>
+                                <div class="col-md-6">
+                                    {{vehicle_form.model.label(class_='form-label')}}
+                                    {{vehicle_form.model(class_='form-control input-shadow form-ismat', placeholder='Modelo')}}
+                                </div>
+                                <div class="col-md-6">
+                                    {{vehicle_form.color.label(class_='form-label')}}
+                                    {{vehicle_form.color(class_='form-control input-shadow form-ismat', placeholder='Cor')}}
+                                </div>
+                                <div class="col-md-6">
+                                    {{vehicle_form.licensePlate.label(class_='form-label')}}
+                                    {{vehicle_form.licensePlate(class_='form-control input-shadow form-ismat', placeholder='Matrícula')}}
+                                </div>
+                                <div class="col-12 d-grid">
+                                    <button type="submit" class="btn-ismat-large">Criar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal fade" id="editarVeiculos" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editarVeiculosLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarVeiculosLabel">Perfil</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col">
+                                <div class="h-100" id="carManagerWrapper">
+
+                                </div>
+                            </div>
+                            <div class="d-flex col flex-column mt-4">
+                                <div class="col align-self-end">
+                                    <button type="button" class="btn-ismat-large" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#criarVeiculo">Criar veículo</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-3 mt-3">
+                <div class="col d-flex flex-column gap-3 align-items-center bg-light perfil-caixa justify-content-center h-100">
+                    <img src="../static/images/car-placeholder.png" alt="Car" style="height: 100px">
+                    <h5>Edite os seus veículos:</h5>
+                    <button type="button" class="btn-ismat-large" data-bs-toggle="modal" data-bs-target="#editarVeiculos" onclick="getVehicles()">Gerir Veículos</button>
+                </div>
+            </div>
+            <div class="col-9 d-flex flex-column bg-light mt-3 perfil-caixa" style="height: 269px">
+                <div class="mt-2 mb-1">
+                    <h3>Alterar Password</h3>
+                </div>
+                <form action="/updatePassword" method="POST">
+                    <div class="col d-flex flex-column justify-content-center">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                {{password_form.password.label}}
+                                {{password_form.password(class_='form-control input-shadow form-ismat', placeholder='Password Atual')}}
+                            </div>
+                            <div class="col-6">
+                                {{password_form.newPassword.label}}
+                                {{password_form.newPassword(class_='form-control input-shadow form-ismat', placeholder='Nova Password')}}
+                            </div>
+                            <div class="col-6">
+                                {{password_form.passwordConfirmation.label}}
+                                {{password_form.passwordConfirmation(class_='form-control input-shadow form-ismat', placeholder='Confirmar Nova Password')}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3 mt-4 mb-3">
+                        <button type="submit" class="btn-ismat-large" name="{{profile.classification}}" onload='starRatingGenerator(document.getElementById("profileRating"),this.name)'>Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% set classification = profile.classification %}
+<script src="../static/js/script.js"></script>
+
+<script>
+    let classification = "{{ profile.classification }}"
+    starRatingGenerator(document.getElementById("profileRating"), classification)
+</script>
+{% endblock %}
+
+
+
+
+</body>

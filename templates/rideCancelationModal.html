@@ -1,0 +1,18 @@
+{% extends 'baseModal.html' %}
+
+{% block id %}cancelRide{{ride.id}}{% endblock %}
+
+{% block title %}Cancelar Boleia{% endblock %}
+
+{% block body %}
+<div class="modal-body">
+    <p>Tem a certeza que quer cancelar a boleia {{ride.origin|upper}}-{{ride.destination|upper}}?</p>
+</div>
+{% endblock %}
+
+{% block footer %}
+      <div class="modal-footer">
+        <a name="{{ride.id}}" href="/" class="btn btn-success" data-bs-dismiss="modal" onclick="cancelRide(this.name)">Sim</a>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Não</button>
+      </div>
+{% endblock %}

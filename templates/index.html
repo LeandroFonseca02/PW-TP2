@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container">
+    <div class="col d-flex flex-column justify-content-center align-items-center">
+        <div class="card flex-column d-flex justify-content-center align-items-center card-list boleia-card-shadow">
+            <div class="card-blocker"></div>
+            <div class="d-flex flex-row-reverse align-self-end me-5">
+                <div>
+                    <button type="button" class="btn-ismat-large" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop">
+                        Pesquisar Boleia
+                    </button>
+                </div>
+                <div class="me-2">
+                    <button type="button" class="btn-ismat-large" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop2">
+                        Criar Boleia
+                    </button>
+                </div>
+            </div>
+            <div class="card-blocker"></div>
+            <div>
+                <h5>Lista de boleias</h5>
+            </div>
+
+            <div class="content-wrapper">
+                <hr class="hr"/>
+                <div id="cardList">
+                    {% for ride in rides %}
+                    <div class="content">
+                        <div class="card boleia-card boleia-card-shadow mt-3">
+                            <div class="card-body">
+                                <div class="d-flex flex-row boleia-header align-items-center gap-4">
+                                    <img class="ms-4 d-lg-block d-md-none car-card-image"
+                                         src="../static/images/car-placeholder.png" alt="Car" style="height: 64px;">
+                                    <div class="col">
+                                        <div class="align-self-start card-header-text">{{ ride.origin }} - {{ ride.destination }}</div>
+                                    </div>
+                                    <div class="col card-header-text">{{ ride.status }}</div>
+                                    <div class="card-header-text">{{ ride.ride_date_day }}/{{ ride.ride_date_month }}</div>
+                                    <div class="card-header-text">{{ ride.ride_hours }}:{{ ride.ride_minutes }}</div>
+                                    <div>
+                                        <button class="btn" type="button" data-bs-toggle="collapse"
+                                                aria-expanded="false"
+                                                aria-controls="#cardContent{{ ride.id }}" onclick="changeExpandIcon(this, 'generico')"
+                                                name="{{ ride.id }}">
+                                            <img src="../static/images/icons/icon-down.svg" style="height: 24px" alt="expandir">
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collapse" id="cardContent{{ ride.id }}">
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="mt-4 d-flex justify-content-center align-items-center">
+                    <button type="button" class="show-more" onclick="showMoreContent(this)">Mostrar mais</button>
+                </div>
+            </div>
+
+
+            <div class="hr-bar">
+                <hr class="hr"/>
+            </div>
+            <div class="card-blocker"></div>
+        </div>
+    </div>
+
+</div>
+<div id="modalsProfile"></div>
+<div id="modals">
+    <!-- Modal Pesquisar Boleia-->
+    <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalPesquisarLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPesquisarLabel">Pesquisar Boleia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col">
+                        <div class="d-inline-flex align-items-center mb-1">
+                            <div class="me-5">
+                                <h5>Queres ir para o ISMAT ?</h5>
+                            </div>
+                            <div class="pb-2">
+                                <div id="selectorPesquisar" class="btn-group" data-toggle="buttons-radio">
+                                    <button name="criarDestinoIsmat" class="btn btn-primary ismat inputDestino active"
+                                            onclick="changeInputs(this)">
+                                        <i class="fas fa-check-circle" style="font-size: 24px"></i>
+                                    </button>
+                                    <button name="criarOrigemIsmat" class="btn btn-primary ismat inputOrigem"
+                                            onclick="changeInputs(this)">
+                                        <i class="fas fa-times-circle" style="font-size: 24px"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="row g-3" action="/searchRide" method="POST">
+                        <div class="col-6">
+                            {{search_form.inputOrigem.label(class_='form-label')}}
+                            {{search_form.inputOrigem(class_='form-control input-shadow form-ismat inputOrigem', placeholder='Origem')}}
+                        </div>
+                        <div class="col-6">
+                            {{search_form.inputDestino.label(class_='form-label')}}
+                            {{search_form.inputDestino(class_='form-control input-shadow form-ismat inputDestino', placeholder='Destino', readonly=true)}}
+                        </div>
+                        <div class="col-6">
+                            {{search_form.inputData.label(class_='form-label')}}
+                            {{search_form.inputData(class_='form-control input-shadow form-ismat', placeholder='Data')}}
+                        </div>
+                        <div class="col-6">
+                            {{search_form.inputHora.label(class_='form-label')}}
+                            {{search_form.inputHora(class_='form-control input-shadow form-ismat', placeholder='Hora')}}
+                        </div>
+                        <div class="col-12 d-grid mt-4">
+                            <button type="submit" class="btn-ismat-large">Pesquisar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Criar Boleia-->
+    <div class="modal fade" id="staticBackdrop2" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Criar Boleia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col">
+                        <div class="d-inline-flex align-items-center mb-1">
+                            <div class="me-4">
+                                <h5>Queres ir para o ISMAT ?</h5>
+                            </div>
+                            <div class="pb-2">
+                                <div id="selector" class="btn-group" data-toggle="buttons-radio">
+                                    <button name="boleia-location" class="btn btn-primary ismat inputDestino active"
+                                            id="destino-ismat" onclick="changeInputs(this)">
+                                        <i class="fas fa-check-circle" style="font-size: 24px"></i>
+                                    </button>
+                                    <button name="boleia-location" class="btn btn-primary ismat inputOrigem"
+                                            id="origem-ismat" onclick="changeInputs(this)">
+                                        <i class="fas fa-times-circle" style="font-size: 24px"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form class="row g-3" action="/createRide" method="POST">
+                        <div class="col-md-6">
+                            <label for="inputVeiculo" class="form-label">Veículo</label>
+                            <select class="form-select input-shadow form-ismat" name="car" aria-label="Veículo"
+                                    id="inputVeiculo">
+                                {% for car in vehicles %}
+                                <option selected>{{car.brand}} {{car.model}} ({{car.license_plate}})</option>
+                                {% endfor %}
+                                <option selected hidden>Veículo</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            {{create_form.availableSeats.label(class_='form-label')}}
+                            {{create_form.availableSeats(class_='form-control input-shadow form-ismat', placeholder='Lugares Disponíveis')}}
+                        </div>
+                        <div class="col-md-6">
+                            {{create_form.origin.label(class_='form-label')}}
+                            {{create_form.origin(class_='form-control input-shadow form-ismat inputOrigem', placeholder='Origem')}}
+                        </div>
+                        <div class="col-md-6">
+                            {{create_form.destination.label(class_='form-label')}}
+                            {{create_form.destination(class_='form-control input-shadow form-ismat inputDestino', placeholder='Destino', readonly=true)}}
+                        </div>
+                        <div class="col-6">
+                            {{create_form.date.label(class_='form-label')}}
+                            {{create_form.date(class_='form-control input-shadow form-ismat', placeholder='Data')}}
+                        </div>
+                        <div class="col-6">
+                            {{create_form.hour.label(class_='form-label')}}
+                            {{create_form.hour(class_='form-control input-shadow form-ismat', placeholder='Hora')}}
+                        </div>
+                        <div>
+                            {{create_form.description.label(class_='form-label')}}
+                            {{create_form.description(class_='form-control input-shadow form-ismat description-input', placeholder='Descrição')}}
+                        </div>
+                        <div class="col-12 d-grid">
+                            <button type="submit" class="btn-ismat-large">Criar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="modalWrapper"></div>
+<script src="../static/js/destinationButton.js"></script>
+<script src="../static/js/showMoreButton.js"></script>
+{% endblock %}
+
